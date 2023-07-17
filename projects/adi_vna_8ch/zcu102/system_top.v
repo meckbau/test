@@ -39,9 +39,9 @@ module system_top (
 
   input       [12:0]      gpio_bd_i,
   output      [ 7:0]      gpio_bd_o,
+  output 		  spare_gpiox,
 
   // AD9083
-
   input                   ref_clk0_p,
   input                   ref_clk0_n,
 
@@ -57,24 +57,10 @@ module system_top (
   input                   sysrefadc_p,
   input                   sysrefadc_n,
 
-  output                  pwdn,
+  output                  pd,
   output                  rstb,
 
-  output                  fpga_csb,
-  output                  fpga_clk,
-  output                  fpga_sdio,
-  input                   fpga_sdo,
-  
-  
-  output                  spiad_sck,  
-  input                   spiad_sdo,
-  output                  spiad_sdi,  
-  output                  adcmon_csb,
-  output                  ndac_csb,
-  
-
   // AD9173
-
   output                  fmcdac_sck,
   output                  fmcdac_mosi,
   input                   fmcdac_miso,
@@ -94,32 +80,46 @@ module system_top (
 
   input                   sync1_n,
   input                   sync1_p,
+  
 
-  // AD9528
-
-  output                  fpga_adclk_refsel,
-
-  // SPIs
-
-  output                  spi_bus0_sck,
-  output                  spi_bus0_sdi,
-  input                   spi_bus0_sdo,
-  output                  spi_bus0_cs_4372,
+   // SPIs
+  // SPI for ...
+  output                  fpga_csb,
+  output                  fpga_sck,
+  output                  fpga_sdio,
+  input                   fpga_sdo,
+  
+  
+  //SPI for AD4696
+  output                  spiad_sck,  
+  input                   spiad_sdo,
+  output                  spiad_sdi,  
+  output                  adcmon_csb,
+  output	          adccnv,
+  
+  // SPI for ADF4372 and AD9528
+  output                  fpga_bus0_sck,
+  output                  fpga_bus0_sdi,
+  input                   fpga_bus0_sdo,
+  output                  fpga_bus0_cs_4372,
   output                  fpga_bus0_csb_9528,
 
-  output                  spi_bus1_sck,
-  output                  spi_bus1_sdi,
-  input                   spi_bus1_sdo,
-  output                  spi_bus1_csn_dat1,
-  output                  spi_bus1_csn_dat2,
-  output                  spi_bus1_csn_dat3,
+  // SPI for 2 x AD5720 and MAX7301
+  output                  fpga_bus1_sck,
+  output                  fpga_bus1_sdi,
+  input                   fpga_bus1_sdo,
+  output                  fpga_bus1_cs1,
+  output                  fpga_bus1_cs2,
+  output                  fpga_gpio_csb,
   
-  output                  spi_bus2_sck,
-  output                  spi_bus2_sdi,
-  input                   spi_bus2_sdo,
-  output                  spi_bus2_csn_dat1,
-  output                  spi_bus2_csn_dat2,
+  // SPI for ADRF6780SC
+  output                  spim_sck,
+  output                  spim_mosi,
+  input                   spim_miso,
+  output                  spim_csb_sig,
+  output                  spim_csb_lo,
   
+  // SPI for 8 x ADL5960
   output                  spi_adl5960_1_sck,
   inout                   spi_adl5960_1_sdio,
   output                  spi_adl5960_1_csn1,
@@ -131,24 +131,29 @@ module system_top (
   output                  spi_adl5960_1_csn7,
   output                  spi_adl5960_1_csn8,
 
+  // SPI for ADMV8818
   output                  fpga_busf_sck,
   output                  fpga_busf_sdi,
   input                   fpga_busf_sdo,
   output                  fpga_busf_csb,
   output                  fpga_busf_sfl,
-  output                  fpga_hlsel,
-  output                  gpio_sw_pg,
-  output                  gpio_sw1_v1,
-  output                  gpio_sw4_v1,
-
-  output                  gpio_mix2en,
+  
+  // SPI for AD5664
+  output                  ndac_sdi,
+  output                  ndac_sck,
+  output                  ndac_csb,
+  
+  output                  seq_shdnn,
+  output                  lmix_rstn,
+  output                  smix_rstn,  
   
   output                  adcmon_rstn,
 
-  output                  adl5960x_sync1);
+  output                  adl5960x_sync1
+  
+  );
 
   // internal signals
-
   wire        [94:0]      gpio_i;
   wire        [94:0]      gpio_o;
   wire        [94:0]      gpio_t;
@@ -164,11 +169,11 @@ module system_top (
   wire                    tx_sync0;
   wire                    tx_sync1;
   
-  wire                    adc_spi_csn;
+  wire                    fpga_csn;
 
-  wire         [ 1:0]     spi_bus0_csn;
-  wire         [ 2:0]     spi_bus1_csn;
-  wire         [ 1:0]     spi_bus2_csn;
+  wire         [ 1:0]     fpga_bus0_csn;
+  wire         [ 2:0]     fpga_bus1_csn;
+  wire         [ 1:0]     spim_csn;
   
   wire         [ 2:0]     spiad_csn_s;
 
@@ -182,17 +187,18 @@ module system_top (
 
 
   // assignments
+  assign fpga_csb = fpga_csn;
 
-  assign fpga_csb = adc_spi_csn;
+  assign fpga_bus0_csb_9528 = fpga_bus0_csn[1];
+  assign fpga_bus0_cs_4372 = fpga_bus0_csn[0];
 
-  assign fpga_bus0_csb_9528 = spi_bus0_csn[1];
-  assign spi_bus0_cs_4372 = spi_bus0_csn[0];
-
-  assign spi_bus1_csn_dat1 = spi_bus1_csn[0];
-  assign spi_bus1_csn_dat2 = spi_bus1_csn[1];
-  assign spi_bus1_csn_dat3 = spi_bus1_csn[2];
+  assign fpga_bus1_cs1 = fpga_bus1_csn[0];
+  assign fpga_bus1_cs2 = fpga_bus1_csn[1];
+  assign fpga_gpio_csb = fpga_bus1_csn[2];
   
-  assign ndac_csb = spiad_csn_s[0];
+  assign spim_csb_sig = spim_csn[0];
+  assign spim_csb_lo = spim_csn[1];
+  
   assign adcmon_csb = spiad_csn_s[1];
   
   assign spi_adl5960_1_sck = spi_adl5960_1_clk_s;
@@ -207,18 +213,16 @@ module system_top (
 
   // gpios
   assign fpga_busf_sfl = gpio_o[50];
-  assign fpga_hlsel = gpio_o[49];
-  assign gpio_sw_pg = gpio_o[48];
+  assign spare_gpiox = gpio_o[49];
+  assign seq_shdnn = gpio_o[48];
 
-  assign gpio_mix2en = gpio_o[43];
-  assign gpio_sw3_v2 = gpio_o[42];
+  assign adccnv = gpio_o[42];
   assign adcmon_rstn = gpio_o[41];
-  assign gpio_sw4_v1 = gpio_o[40];
-  assign gpio_sw1_v1 = gpio_o[36];
+  assign smix_rstn = gpio_o[40];
+  assign lmix_rstn = gpio_o[36];
   assign adl5960x_sync1 = gpio_o[35];
-  assign fpga_adclk_refsel = gpio_o[34];
   assign rstb = gpio_o[33];
-  assign pwdn = gpio_o[32];
+  assign pd = gpio_o[32];
 
   assign gpio_i[94:32] = gpio_o[94:32];
   assign gpio_i[31:21] = gpio_o[31:21];
@@ -322,12 +326,12 @@ module system_top (
     .tx_sync_1_0 (tx_sync0),
     .tx_ref_clk_0 (tx_ref_clk0),
 
-    .spi0_sclk (fpga_clk),
-    .spi0_csn (adc_spi_csn),
+    .spi0_sclk (fpga_sck),
+    .spi0_csn (fpga_csn),
     .spi0_miso (fpga_sdo),
     .spi0_mosi (fpga_sdio),
 
-    .spi1_sclk (spiad_sck),
+    .spi1_sclk (spiad_sck), 
     .spi1_csn (spiad_csn_s),
     .spi1_miso (spiad_sdo),
     .spi1_mosi (spiad_sdi),
@@ -340,29 +344,29 @@ module system_top (
     .spi_fpga_busf_sdo_o (fpga_busf_sdi),
     .spi_fpga_busf_sdi_i (fpga_busf_sdo),
 
-    .spi_bus0_csn_i (spi_bus0_csn),
-    .spi_bus0_csn_o (spi_bus0_csn),
-    .spi_bus0_clk_i (spi_bus0_sck),
-    .spi_bus0_clk_o (spi_bus0_sck),
-    .spi_bus0_sdo_i (spi_bus0_sdi),
-    .spi_bus0_sdo_o (spi_bus0_sdi),
-    .spi_bus0_sdi_i (spi_bus0_sdo),
+    .fpga_bus0_csn_i (fpga_bus0_csn),
+    .fpga_bus0_csn_o (fpga_bus0_csn),
+    .fpga_bus0_clk_i (fpga_bus0_sck),
+    .fpga_bus0_clk_o (fpga_bus0_sck),
+    .fpga_bus0_sdo_i (fpga_bus0_sdi),
+    .fpga_bus0_sdo_o (fpga_bus0_sdi),
+    .fpga_bus0_sdi_i (fpga_bus0_sdo),
 
-    .spi_bus1_csn_i (spi_bus1_csn),
-    .spi_bus1_csn_o (spi_bus1_csn),
-    .spi_bus1_clk_i (spi_bus1_sck),
-    .spi_bus1_clk_o (spi_bus1_sck),
-    .spi_bus1_sdo_i (spi_bus1_sdi),
-    .spi_bus1_sdo_o (spi_bus1_sdi),
-    .spi_bus1_sdi_i (spi_bus1_sdo),
+    .fpga_bus1_csn_i (fpga_bus1_csn),
+    .fpga_bus1_csn_o (fpga_bus1_csn),
+    .fpga_bus1_clk_i (fpga_bus1_sck),
+    .fpga_bus1_clk_o (fpga_bus1_sck),
+    .fpga_bus1_sdo_i (fpga_bus1_sdi),
+    .fpga_bus1_sdo_o (fpga_bus1_sdi),
+    .fpga_bus1_sdi_i (fpga_bus1_sdo),
     
-    .spi_bus2_csn_i (spi_bus2_csn),
-    .spi_bus2_csn_o (spi_bus2_csn),
-    .spi_bus2_clk_i (spi_bus2_sck),
-    .spi_bus2_clk_o (spi_bus2_sck),
-    .spi_bus2_sdo_i (spi_bus2_sdi),
-    .spi_bus2_sdo_o (spi_bus2_sdi),
-    .spi_bus2_sdi_i (spi_bus2_sdo),
+    .spim_csn_i (spim_csn),
+    .spim_csn_o (spim_csn),
+    .spim_clk_i (spim_sck),
+    .spim_clk_o (spim_sck),
+    .spim_miso_i (spim_mosi),
+    .spim_miso_o (spim_mosi),
+    .spim_sdi_i (spim_miso),
 
     .spi_fmcdac_csn_i (fmcdac_cs1),
     .spi_fmcdac_csn_o (fmcdac_cs1),
@@ -371,6 +375,14 @@ module system_top (
     .spi_fmcdac_sdo_i (fmcdac_mosi),
     .spi_fmcdac_sdo_o (fmcdac_mosi),
     .spi_fmcdac_sdi_i (fmcdac_miso),
+    
+    .ndac_spi_csn_i (ndac_csb),
+    .ndac_spi_csn_o (ndac_csb),
+    .ndac_spi_clk_i (ndac_sck),
+    .ndac_spi_clk_o (ndac_sck),
+    .ndac_spi_sdo_i (ndac_sdi),
+    .ndac_spi_sdo_o (ndac_sdi),
+    .ndac_spi_sdi_i (),
 
     .spi_adl5960_1_csn_i (spi_adl5960_1_csn_s),
     .spi_adl5960_1_csn_o (spi_adl5960_1_csn_s),

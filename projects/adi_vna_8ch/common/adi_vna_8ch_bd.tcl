@@ -145,29 +145,29 @@ ad_connect axi_dac_fifo/bypass dac_fifo_bypass
 
 # add spi interfaces
 
-create_bd_port -dir O -from 3 -to 0 spi_bus0_csn_o
-create_bd_port -dir I -from 3 -to 0 spi_bus0_csn_i
-create_bd_port -dir I spi_bus0_clk_i
-create_bd_port -dir O spi_bus0_clk_o
-create_bd_port -dir I spi_bus0_sdo_i
-create_bd_port -dir O spi_bus0_sdo_o
-create_bd_port -dir I spi_bus0_sdi_i
+create_bd_port -dir O -from 3 -to 0 fpga_bus0_csn_o
+create_bd_port -dir I -from 3 -to 0 fpga_bus0_csn_i
+create_bd_port -dir I fpga_bus0_clk_i
+create_bd_port -dir O fpga_bus0_clk_o
+create_bd_port -dir I fpga_bus0_sdo_i
+create_bd_port -dir O fpga_bus0_sdo_o
+create_bd_port -dir I fpga_bus0_sdi_i
 
-create_bd_port -dir O -from 3 -to 0 spi_bus1_csn_o
-create_bd_port -dir I -from 3 -to 0 spi_bus1_csn_i
-create_bd_port -dir I spi_bus1_clk_i
-create_bd_port -dir O spi_bus1_clk_o
-create_bd_port -dir I spi_bus1_sdo_i
-create_bd_port -dir O spi_bus1_sdo_o
-create_bd_port -dir I spi_bus1_sdi_i
+create_bd_port -dir O -from 3 -to 0 fpga_bus1_csn_o
+create_bd_port -dir I -from 3 -to 0 fpga_bus1_csn_i
+create_bd_port -dir I fpga_bus1_clk_i
+create_bd_port -dir O fpga_bus1_clk_o
+create_bd_port -dir I fpga_bus1_sdo_i
+create_bd_port -dir O fpga_bus1_sdo_o
+create_bd_port -dir I fpga_bus1_sdi_i
 
-create_bd_port -dir O -from 1 -to 0 spi_bus2_csn_o
-create_bd_port -dir I -from 1 -to 0 spi_bus2_csn_i
-create_bd_port -dir I spi_bus2_clk_i
-create_bd_port -dir O spi_bus2_clk_o
-create_bd_port -dir I spi_bus2_sdo_i
-create_bd_port -dir O spi_bus2_sdo_o
-create_bd_port -dir I spi_bus2_sdi_i
+create_bd_port -dir O -from 1 -to 0 spim_csn_o
+create_bd_port -dir I -from 1 -to 0 spim_csn_i
+create_bd_port -dir I spim_clk_i
+create_bd_port -dir O spim_clk_o
+create_bd_port -dir I spim_miso_i
+create_bd_port -dir O spim_miso_o
+create_bd_port -dir I spim_sdi_i
 
 create_bd_port -dir O -from 7 -to 0 spi_adl5960_1_csn_o
 create_bd_port -dir I -from 7 -to 0 spi_adl5960_1_csn_i
@@ -193,23 +193,31 @@ create_bd_port -dir I spi_fmcdac_sdo_i
 create_bd_port -dir O spi_fmcdac_sdo_o
 create_bd_port -dir I spi_fmcdac_sdi_i
 
+create_bd_port -dir I ndac_spi_csn_i
+create_bd_port -dir O ndac_spi_csn_o
+create_bd_port -dir I ndac_spi_clk_i
+create_bd_port -dir O ndac_spi_clk_o
+create_bd_port -dir I ndac_spi_sdo_i
+create_bd_port -dir O ndac_spi_sdo_o
+create_bd_port -dir I ndac_spi_sdi_i
+
 # spi instances
 
-ad_ip_instance axi_quad_spi axi_spi_bus0
-ad_ip_parameter axi_spi_bus0 CONFIG.C_USE_STARTUP 0
-ad_ip_parameter axi_spi_bus0 CONFIG.C_NUM_SS_BITS 4
-ad_ip_parameter axi_spi_bus0 CONFIG.C_SCK_RATIO 16
-ad_ip_parameter axi_spi_bus0 CONFIG.Multiples16 8
+ad_ip_instance axi_quad_spi axi_fpga_bus0
+ad_ip_parameter axi_fpga_bus0 CONFIG.C_USE_STARTUP 0
+ad_ip_parameter axi_fpga_bus0 CONFIG.C_NUM_SS_BITS 4
+ad_ip_parameter axi_fpga_bus0 CONFIG.C_SCK_RATIO 16
+ad_ip_parameter axi_fpga_bus0 CONFIG.Multiples16 8
 
-ad_ip_instance axi_quad_spi axi_spi_bus1
-ad_ip_parameter axi_spi_bus1 CONFIG.C_USE_STARTUP 0
-ad_ip_parameter axi_spi_bus1 CONFIG.C_NUM_SS_BITS 4
-ad_ip_parameter axi_spi_bus1 CONFIG.C_SCK_RATIO 8
+ad_ip_instance axi_quad_spi axi_fpga_bus1
+ad_ip_parameter axi_fpga_bus1 CONFIG.C_USE_STARTUP 0
+ad_ip_parameter axi_fpga_bus1 CONFIG.C_NUM_SS_BITS 4
+ad_ip_parameter axi_fpga_bus1 CONFIG.C_SCK_RATIO 8
 
-ad_ip_instance axi_quad_spi axi_spi_bus2
-ad_ip_parameter axi_spi_bus2 CONFIG.C_USE_STARTUP 0
-ad_ip_parameter axi_spi_bus2 CONFIG.C_NUM_SS_BITS 2
-ad_ip_parameter axi_spi_bus2 CONFIG.C_SCK_RATIO 8
+ad_ip_instance axi_quad_spi axi_spim
+ad_ip_parameter axi_spim CONFIG.C_USE_STARTUP 0
+ad_ip_parameter axi_spim CONFIG.C_NUM_SS_BITS 2
+ad_ip_parameter axi_spim CONFIG.C_SCK_RATIO 8
 
 ad_ip_instance axi_quad_spi axi_spi_adl5960_1
 ad_ip_parameter axi_spi_adl5960_1 CONFIG.C_USE_STARTUP 0
@@ -229,34 +237,40 @@ ad_ip_parameter axi_spi_fmcdac CONFIG.C_NUM_SS_BITS 1
 ad_ip_parameter axi_spi_fmcdac CONFIG.C_SCK_RATIO 16
 ad_ip_parameter axi_spi_fmcdac CONFIG.Multiples16 8
 
+ad_ip_instance axi_quad_spi axi_spi_ndac
+ad_ip_parameter axi_spi_ndac CONFIG.C_USE_STARTUP 0
+ad_ip_parameter axi_spi_ndac CONFIG.C_NUM_SS_BITS 1
+ad_ip_parameter axi_spi_ndac CONFIG.C_SCK_RATIO 16
+ad_ip_parameter axi_spi_ndac CONFIG.Multiples16 8
+
 # spi connections
 
-ad_connect  sys_cpu_clk  axi_spi_bus0/ext_spi_clk
-ad_connect  spi_bus0_csn_i  axi_spi_bus0/ss_i
-ad_connect  spi_bus0_csn_o  axi_spi_bus0/ss_o
-ad_connect  spi_bus0_clk_i  axi_spi_bus0/sck_i
-ad_connect  spi_bus0_clk_o  axi_spi_bus0/sck_o
-ad_connect  spi_bus0_sdo_i  axi_spi_bus0/io0_i
-ad_connect  spi_bus0_sdo_o  axi_spi_bus0/io0_o
-ad_connect  spi_bus0_sdi_i  axi_spi_bus0/io1_i
+ad_connect  sys_cpu_clk  axi_fpga_bus0/ext_spi_clk
+ad_connect  fpga_bus0_csn_i  axi_fpga_bus0/ss_i
+ad_connect  fpga_bus0_csn_o  axi_fpga_bus0/ss_o
+ad_connect  fpga_bus0_clk_i  axi_fpga_bus0/sck_i
+ad_connect  fpga_bus0_clk_o  axi_fpga_bus0/sck_o
+ad_connect  fpga_bus0_sdo_i  axi_fpga_bus0/io0_i
+ad_connect  fpga_bus0_sdo_o  axi_fpga_bus0/io0_o
+ad_connect  fpga_bus0_sdi_i  axi_fpga_bus0/io1_i
 
-ad_connect  sys_cpu_clk  axi_spi_bus1/ext_spi_clk
-ad_connect  spi_bus1_csn_i  axi_spi_bus1/ss_i
-ad_connect  spi_bus1_csn_o  axi_spi_bus1/ss_o
-ad_connect  spi_bus1_clk_i  axi_spi_bus1/sck_i
-ad_connect  spi_bus1_clk_o  axi_spi_bus1/sck_o
-ad_connect  spi_bus1_sdo_i  axi_spi_bus1/io0_i
-ad_connect  spi_bus1_sdo_o  axi_spi_bus1/io0_o
-ad_connect  spi_bus1_sdi_i  axi_spi_bus1/io1_i
+ad_connect  sys_cpu_clk  axi_fpga_bus1/ext_spi_clk
+ad_connect  fpga_bus1_csn_i  axi_fpga_bus1/ss_i
+ad_connect  fpga_bus1_csn_o  axi_fpga_bus1/ss_o
+ad_connect  fpga_bus1_clk_i  axi_fpga_bus1/sck_i
+ad_connect  fpga_bus1_clk_o  axi_fpga_bus1/sck_o
+ad_connect  fpga_bus1_sdo_i  axi_fpga_bus1/io0_i
+ad_connect  fpga_bus1_sdo_o  axi_fpga_bus1/io0_o
+ad_connect  fpga_bus1_sdi_i  axi_fpga_bus1/io1_i
 
-ad_connect  sys_cpu_clk  axi_spi_bus2/ext_spi_clk
-ad_connect  spi_bus2_csn_i  axi_spi_bus2/ss_i
-ad_connect  spi_bus2_csn_o  axi_spi_bus2/ss_o
-ad_connect  spi_bus2_clk_i  axi_spi_bus2/sck_i
-ad_connect  spi_bus2_clk_o  axi_spi_bus2/sck_o
-ad_connect  spi_bus2_sdo_i  axi_spi_bus2/io0_i
-ad_connect  spi_bus2_sdo_o  axi_spi_bus2/io0_o
-ad_connect  spi_bus2_sdi_i  axi_spi_bus2/io1_i
+ad_connect  sys_cpu_clk  axi_spim/ext_spi_clk
+ad_connect  spim_csn_i  axi_spim/ss_i
+ad_connect  spim_csn_o  axi_spim/ss_o
+ad_connect  spim_clk_i  axi_spim/sck_i
+ad_connect  spim_clk_o  axi_spim/sck_o
+ad_connect  spim_miso_i  axi_spim/io0_i
+ad_connect  spim_miso_o  axi_spim/io0_o
+ad_connect  spim_sdi_i  axi_spim/io1_i
 
 ad_connect  sys_cpu_clk  axi_spi_adl5960_1/ext_spi_clk
 ad_connect  spi_adl5960_1_csn_i  axi_spi_adl5960_1/ss_i
@@ -285,14 +299,24 @@ ad_connect  spi_fmcdac_sdo_i  axi_spi_fmcdac/io0_i
 ad_connect  spi_fmcdac_sdo_o  axi_spi_fmcdac/io0_o
 ad_connect  spi_fmcdac_sdi_i  axi_spi_fmcdac/io1_i
 
+ad_connect  sys_cpu_clk  axi_spi_ndac/ext_spi_clk
+ad_connect  ndac_spi_csn_i  axi_spi_ndac/ss_i
+ad_connect  ndac_spi_csn_o  axi_spi_ndac/ss_o
+ad_connect  ndac_spi_clk_i  axi_spi_ndac/sck_i
+ad_connect  ndac_spi_clk_o  axi_spi_ndac/sck_o
+ad_connect  ndac_spi_sdo_i  axi_spi_ndac/io0_i
+ad_connect  ndac_spi_sdo_o  axi_spi_ndac/io0_o
+ad_connect  ndac_spi_sdi_i  axi_spi_ndac/io1_i
+
 
 # interconnect (cpu)
-ad_cpu_interconnect 0x48000000 axi_spi_bus0
-ad_cpu_interconnect 0x48100000 axi_spi_bus1
+ad_cpu_interconnect 0x48000000 axi_fpga_bus0
+ad_cpu_interconnect 0x48100000 axi_fpga_bus1
 ad_cpu_interconnect 0x48200000 axi_spi_adl5960_1
 ad_cpu_interconnect 0x48300000 axi_spi_fmcdac
 ad_cpu_interconnect 0x48400000 axi_spi_fpga_busf
-ad_cpu_interconnect 0x48500000 axi_spi_bus2
+ad_cpu_interconnect 0x48500000 axi_spim
+ad_cpu_interconnect 0x48600000 axi_spi_ndac
 
 ad_cpu_interconnect 0x44B60000 dac_jesd204_xcvr
 ad_cpu_interconnect 0x44B04000 dac_jesd204_transport
@@ -303,12 +327,13 @@ ad_cpu_interconnect 0x7c420000 dac_dma
 ad_cpu_interrupt ps-3  mb-12 axi_spi_fmcdac/ip2intc_irpt
 ad_cpu_interrupt ps-4  mb-11 dac_jesd204_link/irq
 ad_cpu_interrupt ps-5  mb-10 dac_dma/irq
+ad_cpu_interrupt ps-6  mb-10 axi_spi_ndac/ip2intc_irpt
 
 ad_cpu_interrupt ps-8  mb-7  axi_spi_adl5960_1/ip2intc_irpt
 ad_cpu_interrupt ps-9  mb-6  axi_spi_fpga_busf/ip2intc_irpt
-ad_cpu_interrupt ps-10 mb-5  axi_spi_bus1/ip2intc_irpt
-ad_cpu_interrupt ps-11 mb-4  axi_spi_bus0/ip2intc_irpt
-ad_cpu_interrupt ps-15 mb-14  axi_spi_bus2/ip2intc_irpt
+ad_cpu_interrupt ps-10 mb-5  axi_fpga_bus1/ip2intc_irpt
+ad_cpu_interrupt ps-11 mb-4  axi_fpga_bus0/ip2intc_irpt
+ad_cpu_interrupt ps-15 mb-14  axi_spim/ip2intc_irpt
 
 # interconnect mem
 
