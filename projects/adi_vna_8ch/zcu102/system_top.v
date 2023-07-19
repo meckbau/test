@@ -169,7 +169,7 @@ module system_top (
   wire                    tx_sync0;
   wire                    tx_sync1;
   
-  wire                    fpga_csn;
+  wire         [ 2:0]     fpga_csn;
 
   wire         [ 1:0]     fpga_bus0_csn;
   wire         [ 2:0]     fpga_bus1_csn;
@@ -184,10 +184,8 @@ module system_top (
   wire                    spi_adl5960_1_miso_s;
   
 
-
-
   // assignments
-  assign fpga_csb = fpga_csn;
+  assign fpga_csb = fpga_csn[0];
 
   assign fpga_bus0_csb_9528 = fpga_bus0_csn[1];
   assign fpga_bus0_cs_4372 = fpga_bus0_csn[0];
@@ -199,7 +197,7 @@ module system_top (
   assign spim_csb_sig = spim_csn[0];
   assign spim_csb_lo = spim_csn[1];
   
-  assign adcmon_csb = spiad_csn_s[1];
+  assign adcmon_csb = spiad_csn_s[0];
   
   assign spi_adl5960_1_sck = spi_adl5960_1_clk_s;
   assign spi_adl5960_1_csn1 = spi_adl5960_1_csn_s[0];
