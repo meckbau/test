@@ -26,6 +26,7 @@ adi_project adi_vna_8ch_zcu102 0 [list \
 adi_project_files adi_vna_8ch_zcu102 [list \
   "system_top.v" \
   "system_constr.xdc" \
+  "timing_constr.xdc" \
   "$ad_hdl_dir/library/common/ad_3w_spi.v" \
   "$ad_hdl_dir/library/common/ad_iobuf.v" \
   "$ad_hdl_dir/library/util_cdc/sync_bits.v" \

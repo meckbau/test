@@ -152,35 +152,4 @@ set_property  -dict {PACKAGE_PIN  AA12 IOSTANDARD LVCMOS18} [get_ports ndac_sdi]
 # fix xcvr location assignment
 set_property LOC GTHE4_CHANNEL_X1Y10  [get_cells -hierarchical -filter {NAME =~ *util_ad9083_xcvr/inst/i_xch_0/i_gthe4_channel}]
 
-# clocks
-create_clock -period 2 -name rx_ref_clk [get_ports ref_clk0_p]
-create_clock -period 8 -name rx_ref_clk2 [get_ports glblclk_p]
-
-create_clock -period 3.2 -name tx_ref_clk [get_ports br40_ext_p]
-
-set_input_delay -clock [get_clocks rx_ref_clk2] [get_property PERIOD [get_clocks rx_ref_clk2]] \
-                [get_ports -regexp -filter { NAME =~  ".*sysrefadc.*" && DIRECTION == "IN" }]
-
-create_generated_clock -name clk_sck0  \
-  -source [get_pins i_system_wrapper/system_i/axi_fpga_bus1/ext_spi_clk] \
-  -divide_by 2 [get_pins i_system_wrapper/system_i/axi_fpga_bus1/sck_o]
-
-create_generated_clock -name clk_sck1  \
-  -source [get_pins i_system_wrapper/system_i/axi_spi_adl5960_1/ext_spi_clk] \
-  -divide_by 2 [get_pins i_system_wrapper/system_i/axi_spi_adl5960_1/sck_o]
-
-
-# For transceiver output clocks use reference clock divided by two
-# This will help autoderive the clocks correcly
-set_case_analysis -quiet 0 [get_pins -quiet -hier *_channel/TXSYSCLKSEL[0]]
-set_case_analysis -quiet 0 [get_pins -quiet -hier *_channel/TXSYSCLKSEL[1]]
-set_case_analysis -quiet 0 [get_pins -quiet -hier *_channel/TXOUTCLKSEL[0]]
-set_case_analysis -quiet 0 [get_pins -quiet -hier *_channel/TXOUTCLKSEL[1]]
-set_case_analysis -quiet 1 [get_pins -quiet -hier *_channel/TXOUTCLKSEL[2]]
-
-set_case_analysis -quiet 0 [get_pins -quiet -hier *_channel/RXSYSCLKSEL[0]]
-set_case_analysis -quiet 0 [get_pins -quiet -hier *_channel/RXSYSCLKSEL[1]]
-set_case_analysis -quiet 0 [get_pins -quiet -hier *_channel/RXOUTCLKSEL[0]]
-set_case_analysis -quiet 0 [get_pins -quiet -hier *_channel/RXOUTCLKSEL[1]]
-set_case_analysis -quiet 1 [get_pins -quiet -hier *_channel/RXOUTCLKSEL[2]]
 
