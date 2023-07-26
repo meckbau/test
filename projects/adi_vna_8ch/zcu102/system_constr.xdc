@@ -48,8 +48,6 @@ set_property  -dict {PACKAGE_PIN  L13   IOSTANDARD LVCMOS18} [get_ports adcmon_c
 set_property  -dict {PACKAGE_PIN  L8}                       [get_ports br40_ext_p]         ; ##  B20  FMC_HPC0_GBTCLK1_M2C_C_P
 set_property  -dict {PACKAGE_PIN  L7}                       [get_ports br40_ext_n]         ; ##  B21  FMC_HPC0_GBTCLK1_M2C_C_N
 
-# The commented pins are not required when using modes that have 4 virtual converters
-
 #set_property  -dict {PACKAGE_PIN  G4}                       [get_ports dac_data_p[7]]      ; ##  C02  FMC_HPC0_DP0_C2M_P       SERDESP<7>  swapped polarity
 #set_property  -dict {PACKAGE_PIN  G3}                       [get_ports dac_data_n[7]]      ; ##  C03  FMC_HPC0_DP0_C2M_N       SERDESN<7>  swapped polarity
 #set_property  -dict {PACKAGE_PIN  H6}                       [get_ports dac_data_p[6]]      ; ##  A22  FMC_HPC0_DP1_C2M_P       SERDESP<6>
@@ -107,12 +105,12 @@ set_property  -dict {PACKAGE_PIN  T11   IOSTANDARD LVCMOS18} [get_ports spare_gp
 # SPIs
 ###############################################################################
 
-set_property  -dict {PACKAGE_PIN  Y12  IOSTANDARD LVCMOS18} [get_ports fpga_bus0_sck]       ; ##  G18  FMC_HPC0_LA16_P
-set_property  -dict {PACKAGE_PIN  W7   IOSTANDARD LVCMOS18} [get_ports fpga_bus0_sdi]       ; ##  G15  FMC_HPC0_LA12_P
-set_property  -dict {PACKAGE_PIN  W6   IOSTANDARD LVCMOS18} [get_ports fpga_bus0_sdo]       ; ##  G16  FMC_HPC0_LA12_N
-set_property  -dict {PACKAGE_PIN  N13  IOSTANDARD LVCMOS18} [get_ports fpga_bus0_cs_4372]   ; ##  G21  FMC_HPC0_LA20_P
-set_property  -dict {PACKAGE_PIN  U4   IOSTANDARD LVCMOS18} [get_ports fpga_bus0_csb_9528]  ; ##  H14  FMC_HPC0_LA07_N
-set_property  -dict {PACKAGE_PIN  M13  IOSTANDARD LVCMOS18} [get_ports seq_shdnn]           ; ##  G22  FMC_HPC0_LA20_N
+set_property  -dict {PACKAGE_PIN  Y12  IOSTANDARD LVCMOS18} [get_ports fpga_bus0_sck]       	; ##  G18  FMC_HPC0_LA16_P
+set_property  -dict {PACKAGE_PIN  W7   IOSTANDARD LVCMOS18} [get_ports fpga_bus0_sdi]       	; ##  G15  FMC_HPC0_LA12_P
+set_property  -dict {PACKAGE_PIN  W6   IOSTANDARD LVCMOS18} [get_ports fpga_bus0_sdo]       	; ##  G16  FMC_HPC0_LA12_N
+set_property  -dict {PACKAGE_PIN  N13  IOSTANDARD LVCMOS18} [get_ports fpga_bus0_cs_4372]   	; ##  G21  FMC_HPC0_LA20_P
+set_property  -dict {PACKAGE_PIN  U4   IOSTANDARD LVCMOS18} [get_ports fpga_bus0_csb_9528]  	; ##  H14  FMC_HPC0_LA07_N
+set_property  -dict {PACKAGE_PIN  M13  IOSTANDARD LVCMOS18 PULLUP TRUE} [get_ports seq_shdnn] 	; ##  G22  FMC_HPC0_LA20_N
 
 set_property  -dict {PACKAGE_PIN  M11  IOSTANDARD LVCMOS18} [get_ports fpga_bus1_sck]       ; ##  G27  FMC_HPC0_LA25_P
 set_property  -dict {PACKAGE_PIN  M15  IOSTANDARD LVCMOS18} [get_ports fpga_bus1_sdi]       ; ##  G24  FMC_HPC0_LA22_P
