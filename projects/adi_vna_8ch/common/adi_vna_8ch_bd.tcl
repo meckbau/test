@@ -145,8 +145,8 @@ ad_connect axi_dac_fifo/bypass dac_fifo_bypass
 
 # add spi interfaces
 
-create_bd_port -dir O -from 3 -to 0 fpga_bus0_csn_o
-create_bd_port -dir I -from 3 -to 0 fpga_bus0_csn_i
+create_bd_port -dir O -from 1 -to 0 fpga_bus0_csn_o
+create_bd_port -dir I -from 1 -to 0 fpga_bus0_csn_i
 create_bd_port -dir I fpga_bus0_clk_i
 create_bd_port -dir O fpga_bus0_clk_o
 create_bd_port -dir I fpga_bus0_sdo_i
@@ -205,7 +205,7 @@ create_bd_port -dir I ndac_spi_sdi_i
 
 ad_ip_instance axi_quad_spi axi_fpga_bus0
 ad_ip_parameter axi_fpga_bus0 CONFIG.C_USE_STARTUP 0
-ad_ip_parameter axi_fpga_bus0 CONFIG.C_NUM_SS_BITS 4
+ad_ip_parameter axi_fpga_bus0 CONFIG.C_NUM_SS_BITS 2
 ad_ip_parameter axi_fpga_bus0 CONFIG.C_SCK_RATIO 16
 ad_ip_parameter axi_fpga_bus0 CONFIG.Multiples16 4
 

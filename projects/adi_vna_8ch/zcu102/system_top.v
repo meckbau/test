@@ -172,7 +172,7 @@ module system_top (
   wire         [ 2:0]     fpga_csn;
 
   wire         [ 1:0]     fpga_bus0_csn;
-  wire         [ 2:0]     fpga_bus1_csn;
+  wire         [ 3:0]     fpga_bus1_csn;
   wire         [ 1:0]     spim_csn;
   
   wire         [ 2:0]     spiad_csn_s;
