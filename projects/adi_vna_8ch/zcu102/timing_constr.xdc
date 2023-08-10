@@ -8,6 +8,7 @@ create_clock -period 3.2 -name tx_ref_clk [get_ports br40_ext_p]
 set_input_delay -clock [get_clocks rx_ref_clk2] [get_property PERIOD [get_clocks rx_ref_clk2]] \
                 [get_ports -regexp -filter { NAME =~  ".*sysrefadc.*" && DIRECTION == "IN" }]
 
+create_generated_clock -name dma_clk [get_pins i_system_wrapper/system_i/dma_clk_generator/inst/mmcme4_adv_inst/CLKOUT0]
 
 # For transceiver output clocks use reference clock divided by two
 # This will help autoderive the clocks correcly

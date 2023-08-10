@@ -1,5 +1,5 @@
 
-set dac_fifo_address_width 13
+set dac_fifo_address_width 16
 
 source $ad_hdl_dir/projects/common/zcu102/zcu102_system_bd.tcl
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl

@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2022 (c) Analog Devices, Inc. All rights reserved.
+// Copyright 2022 - 2023 (c) Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -80,7 +80,6 @@ module system_top (
 
   input                   sync1_n,
   input                   sync1_p,
-  
 
    // SPIs
   // SPI for ...
@@ -88,15 +87,14 @@ module system_top (
   output                  fpga_sck,
   output                  fpga_sdio,
   input                   fpga_sdo,
-  
-  
+
   //SPI for AD4696
-  output                  spiad_sck,  
+  output                  spiad_sck,
   input                   spiad_sdo,
-  output                  spiad_sdi,  
+  output                  spiad_sdi,
   output                  adcmon_csb,
   output	          adccnv,
-  
+
   // SPI for ADF4372 and AD9528
   output                  fpga_bus0_sck,
   output                  fpga_bus0_sdi,
@@ -111,14 +109,14 @@ module system_top (
   output                  fpga_bus1_cs1,
   output                  fpga_bus1_cs2,
   output                  fpga_gpio_csb,
-  
+
   // SPI for ADRF6780SC
   output                  spim_sck,
   output                  spim_mosi,
   input                   spim_miso,
   output                  spim_csb_sig,
   output                  spim_csb_lo,
-  
+
   // SPI for 8 x ADL5960
   output                  spi_adl5960_1_sck,
   inout                   spi_adl5960_1_sdio,
@@ -137,21 +135,20 @@ module system_top (
   input                   fpga_busf_sdo,
   output                  fpga_busf_csb,
   output                  fpga_busf_sfl,
-  
+
   // SPI for AD5664
   output                  ndac_sdi,
   output                  ndac_sck,
   output                  ndac_csb,
-  
+
   output                  seq_shdnn,
   output                  lmix_rstn,
-  output                  smix_rstn,  
-  
+  output                  smix_rstn,
+
   output                  adcmon_rstn,
 
   output                  adl5960x_sync1
-  
-  );
+);
 
   // internal signals
   wire        [94:0]      gpio_i;
@@ -168,21 +165,19 @@ module system_top (
   wire                    rx_ref_core_clk0;
   wire                    tx_sync0;
   wire                    tx_sync1;
-  
+
   wire         [ 2:0]     fpga_csn;
 
   wire         [ 1:0]     fpga_bus0_csn;
   wire         [ 3:0]     fpga_bus1_csn;
   wire         [ 1:0]     spim_csn;
-  
+
   wire         [ 2:0]     spiad_csn_s;
 
-  
   wire         [ 7:0]     spi_adl5960_1_csn_s;
   wire                    spi_adl5960_1_clk_s;
   wire                    spi_adl5960_1_mosi_s;
   wire                    spi_adl5960_1_miso_s;
-  
 
   // assignments
   assign fpga_csb = fpga_csn[0];
@@ -193,12 +188,12 @@ module system_top (
   assign fpga_bus1_cs1 = fpga_bus1_csn[0];
   assign fpga_bus1_cs2 = fpga_bus1_csn[1];
   assign fpga_gpio_csb = fpga_bus1_csn[2];
-  
+
   assign spim_csb_sig = spim_csn[0];
   assign spim_csb_lo = spim_csn[1];
-  
+
   assign adcmon_csb = spiad_csn_s[0];
-  
+
   assign spi_adl5960_1_sck = spi_adl5960_1_clk_s;
   assign spi_adl5960_1_csn1 = spi_adl5960_1_csn_s[0];
   assign spi_adl5960_1_csn2 = spi_adl5960_1_csn_s[1];
@@ -230,7 +225,7 @@ module system_top (
   assign gpio_bd_o = gpio_o[7:0];
 
   // instantiations
-        
+
   IBUFDS IBUFDS_inst (
     .O(rx_ref_core_clk0_s),
     .I(glblclk_p),
@@ -290,8 +285,7 @@ module system_top (
     .I (sync1_n),
     .IB (sync1_p),
     .O (tx_sync1));
-    
-    
+
   system_wrapper i_system_wrapper (
     .gpio_i (gpio_i),
     .gpio_o (gpio_o),
@@ -329,7 +323,7 @@ module system_top (
     .spi0_miso (fpga_sdo),
     .spi0_mosi (fpga_sdio),
 
-    .spi1_sclk (spiad_sck), 
+    .spi1_sclk (spiad_sck),
     .spi1_csn (spiad_csn_s),
     .spi1_miso (spiad_sdo),
     .spi1_mosi (spiad_sdi),
@@ -357,7 +351,7 @@ module system_top (
     .fpga_bus1_sdo_i (fpga_bus1_sdi),
     .fpga_bus1_sdo_o (fpga_bus1_sdi),
     .fpga_bus1_sdi_i (fpga_bus1_sdo),
-    
+
     .spim_csn_i (spim_csn),
     .spim_csn_o (spim_csn),
     .spim_clk_i (spim_sck),
@@ -373,7 +367,7 @@ module system_top (
     .spi_fmcdac_sdo_i (fmcdac_mosi),
     .spi_fmcdac_sdo_o (fmcdac_mosi),
     .spi_fmcdac_sdi_i (fmcdac_miso),
-    
+
     .ndac_spi_csn_i (ndac_csb),
     .ndac_spi_csn_o (ndac_csb),
     .ndac_spi_clk_i (ndac_sck),
@@ -392,5 +386,3 @@ module system_top (
   );
 
 endmodule
-
-// ***************************************************************************

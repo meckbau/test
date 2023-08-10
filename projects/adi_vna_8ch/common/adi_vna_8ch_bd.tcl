@@ -129,10 +129,10 @@ ad_connect dac_upack/s_axis_valid VCC
 ad_connect dac_upack/s_axis_ready axi_dac_fifo/dac_valid
 ad_connect dac_upack/s_axis_data axi_dac_fifo/dac_data
 ad_connect dac_jesd204_transport/dac_dunf axi_dac_fifo/dac_dunf
-ad_connect sys_cpu_clk axi_dac_fifo/dma_clk
-ad_connect sys_cpu_reset axi_dac_fifo/dma_rst
-ad_connect sys_cpu_clk dac_dma/m_axis_aclk
-ad_connect sys_cpu_resetn dac_dma/m_src_axi_aresetn
+ad_connect $sys_dma_clk axi_dac_fifo/dma_clk
+ad_connect $sys_dma_resetn axi_dac_fifo/dma_rst
+ad_connect $sys_dma_clk dac_dma/m_axis_aclk
+ad_connect $sys_dma_resetn dac_dma/m_src_axi_aresetn
 ad_connect axi_dac_fifo/dma_xfer_req dac_dma/m_axis_xfer_req
 ad_connect axi_dac_fifo/dma_ready dac_dma/m_axis_ready
 ad_connect axi_dac_fifo/dma_data dac_dma/m_axis_data
@@ -339,5 +339,5 @@ ad_cpu_interrupt ps-15 mb-14  axi_spim/ip2intc_irpt
 
 # interconnect mem
 
-ad_mem_hp3_interconnect sys_cpu_clk sys_ps7/S_AXI_HP1
-ad_mem_hp3_interconnect sys_cpu_clk dac_dma/m_src_axi
+ad_mem_hp3_interconnect $sys_dma_clk sys_ps8/S_AXI_HP3
+ad_mem_hp3_interconnect $sys_dma_clk dac_dma/m_src_axi
