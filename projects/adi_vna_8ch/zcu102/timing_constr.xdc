@@ -1,3 +1,11 @@
+###############################################################################
+
+## Copyright (C) 2023-2023 Analog Devices, Inc. All rights reserved.
+
+### SPDX short identifier: ADIBSD
+
+###############################################################################
+
 ### Timing constraints
 # clocks
 create_clock -period 2 -name rx_ref_clk [get_ports ref_clk0_p]
