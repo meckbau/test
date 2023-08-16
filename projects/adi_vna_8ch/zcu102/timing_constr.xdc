@@ -24,7 +24,6 @@ set_case_analysis -quiet 0 [get_pins -quiet -hier *_channel/RXOUTCLKSEL[0]]
 set_case_analysis -quiet 0 [get_pins -quiet -hier *_channel/RXOUTCLKSEL[1]]
 set_case_analysis -quiet 1 [get_pins -quiet -hier *_channel/RXOUTCLKSEL[2]]
 
-
 ## ndac_spi
 set ndac_tco_max 2
 set ndac_tco_min 1.5
@@ -89,7 +88,6 @@ set_output_delay -clock busf_sclk -min [expr $busf_tdata_trace_delay_min - $busf
 set_multicycle_path 4 -setup -start -from [get_clocks -of_objects [get_pins i_system_wrapper/system_i/axi_spi_fpga_busf/ext_spi_clk]] -to busf_sclk
 set_multicycle_path 3 -hold -from [get_clocks -of_objects [get_pins i_system_wrapper/system_i/axi_spi_fpga_busf/ext_spi_clk]] -to busf_sclk
 
-
 ## axi_fpga_bus1
 set fpga_bus1_tco_max 25
 set fpga_bus1_tco_min 15
@@ -112,7 +110,6 @@ set_output_delay -clock fpga_bus1_sclk -max [expr $fpga_bus1_tsu + $fpga_bus1_td
 set_output_delay -clock fpga_bus1_sclk -min [expr $fpga_bus1_tdata_trace_delay_min - $fpga_bus1_th - $fpga_bus1_tclk_trace_delay_max] [get_ports fpga_bus1_sdi];
 set_multicycle_path 8 -setup -start -from [get_clocks -of_objects [get_pins i_system_wrapper/system_i/axi_fpga_bus1/ext_spi_clk]] -to fpga_bus1_sclk
 set_multicycle_path 7 -hold -from [get_clocks -of_objects [get_pins i_system_wrapper/system_i/axi_fpga_bus1/ext_spi_clk]] -to fpga_bus1_sclk
-
 
 ## axi_fpga_bus0
 set fpga_bus0_tco_max 10
@@ -137,7 +134,6 @@ set_output_delay -clock fpga_bus0_sclk -min [expr $fpga_bus0_tdata_trace_delay_m
 set_multicycle_path 4 -setup -start -from [get_clocks -of_objects [get_pins i_system_wrapper/system_i/axi_fpga_bus0/ext_spi_clk]] -to fpga_bus0_sclk
 set_multicycle_path 3 -hold -from [get_clocks -of_objects [get_pins i_system_wrapper/system_i/axi_fpga_bus0/ext_spi_clk]] -to fpga_bus0_sclk
 
-
 ## axi_spim
 set spim_tco_max 10
 set spim_tco_min 8
@@ -160,8 +156,6 @@ set_output_delay -clock spim_sclk -max [expr $spim_tsu + $spim_tdata_trace_delay
 set_output_delay -clock spim_sclk -min [expr $spim_tdata_trace_delay_min - $spim_th - $spim_tclk_trace_delay_max] [get_ports spim_mosi];
 set_multicycle_path 8 -setup -start -from [get_clocks -of_objects [get_pins i_system_wrapper/system_i/axi_spim/ext_spi_clk]] -to spim_sclk
 set_multicycle_path 7 -hold -from [get_clocks -of_objects [get_pins i_system_wrapper/system_i/axi_spim/ext_spi_clk]] -to spim_sclk
-
-
 
 ## axi_fmcdac
 set fmcdac_tco_max 5

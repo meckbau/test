@@ -39,7 +39,7 @@ module system_top (
 
   input       [12:0]      gpio_bd_i,
   output      [ 7:0]      gpio_bd_o,
-  output 		  spare_gpiox,
+  output                  spare_gpiox,
 
   // AD9083
   input                   ref_clk0_p,
@@ -82,7 +82,7 @@ module system_top (
   input                   sync1_p,
 
    // SPIs
-  // SPI for ...
+  // SPI for AD9083
   output                  fpga_csb,
   output                  fpga_sck,
   output                  fpga_sdio,
@@ -144,9 +144,7 @@ module system_top (
   output                  seq_shdnn,
   output                  lmix_rstn,
   output                  smix_rstn,
-
   output                  adcmon_rstn,
-
   output                  adl5960x_sync1
 );
 
@@ -250,8 +248,8 @@ module system_top (
     .ODIV2 ());
 
   ad_3w_spi #(
-    .NUM_OF_SLAVES(8))
-    i_spi_adl5960_1 (
+    .NUM_OF_SLAVES(8)
+  ) i_spi_adl5960_1 (
     .spi_csn(spi_adl5960_1_csn_s),
     .spi_clk(spi_adl5960_1_clk_s),
     .spi_mosi(spi_adl5960_1_mosi_s),
@@ -305,14 +303,6 @@ module system_top (
     .tx_data_1_2_p (dac_data_p[2]),
     .tx_data_1_3_n (dac_data_n[3]),
     .tx_data_1_3_p (dac_data_p[3]),
-    //.tx_data_1_4_n (dac_data_n[4]),
-    //.tx_data_1_4_p (dac_data_p[4]),
-    //.tx_data_1_5_n (dac_data_n[5]),
-    //.tx_data_1_5_p (dac_data_p[5]),
-    //.tx_data_1_6_n (dac_data_n[6]),
-    //.tx_data_1_6_p (dac_data_p[6]),
-    //.tx_data_1_7_n (dac_data_n[7]),
-    //.tx_data_1_7_p (dac_data_p[7]),
 
     .tx_sysref_1_0 (dac_sysref),
     .tx_sync_1_0 (tx_sync0),
@@ -382,7 +372,6 @@ module system_top (
     .spi_adl5960_1_clk_o (spi_adl5960_1_clk_s),
     .spi_adl5960_1_sdo_i (spi_adl5960_1_mosi_s),
     .spi_adl5960_1_sdo_o (spi_adl5960_1_mosi_s),
-    .spi_adl5960_1_sdi_i (spi_adl5960_1_miso_s)
-  );
+    .spi_adl5960_1_sdi_i (spi_adl5960_1_miso_s));
 
 endmodule
