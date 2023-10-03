@@ -49,8 +49,8 @@ and the status of their documentation.
    * -
      - on TODO list
      -
-   * -
-     - on TODO list
+   * - :ref:`ad9081_fmca_ebz <ad9081_fmca_ebz>`
+     - in progress
      -
    * - :ref:`ad9783_ebz/zcu102 <ad9783_ebz_zcu102>`
      - done

@@ -23,6 +23,7 @@ HDL Reference Designs
 
    projects/index
    projects/template/index
+   projects/ad9081_fmca_ebz/index
    projects/ad9783_ebz_zcu102/index
 
 .. role:: red
