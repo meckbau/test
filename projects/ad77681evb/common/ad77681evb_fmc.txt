@@ -1,0 +1,16 @@
+FMC_pin   FMC_port       Schematic_name     System_top_name     IOSTANDARD                         Termination
+
+# ad7768-1
+
+D8        FMC_LA01_CC_P  SCLK_1             ad7768_spi_sclk     LVCMOS25                           IOB TRUE
+H7        FMC_LA02_P     DOUT_1             ad7768_spi_miso     LVCMOS25                           IOB TRUE PULLTYPE PULLUP
+G9        FMC_LA03_P     SDI_1              ad7768_spi_mosi     LVCMOS25                           #N/A
+H10       FMC_LA04_P     CS_1               ad7768_spi_cs       LVCMOS25                           #N/A
+G15       FMC_LA12_P     RESET_1            ad7768_reset        LVCMOS25                           #N/A
+G12       FMC_LA08_P     GPIO0_1            ad7768_gpio[0]      LVCMOS25                           #N/A
+D14       FMC_LA09_P     GPIO1_1            ad7768_gpio[1]      LVCMOS25                           #N/A
+C14       FMC_LA10_P     GPIO2_1            ad7768_gpio[2]      LVCMOS25                           #N/A
+H16       FMC_LA11_P     GPIO3_1            ad7768_gpio[3]      LVCMOS25                           #N/A
+D11       FMC_LA05_P     DRDY_1             ad7768_drdy         LVCMOS25                           IOB TRUE
+H5        FMC_CLK0_N     SYNC_OUT_1         ad7768_sync_out     LVCMOS25                           #N/A
+C10       FMC_LA06_P     SYNC_IN_1          ad7768_sync_in      LVCMOS25                           #N/A
