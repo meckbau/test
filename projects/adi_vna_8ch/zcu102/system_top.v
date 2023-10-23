@@ -208,6 +208,7 @@ module system_top (
   assign seq_shdnn = 1'b1;
   //assign seq_shdnn = gpio_o[48];
 
+  assign adccnv = spiad_csn_s[0];
   assign adcmon_rstn = gpio_o[41];
   assign smix_rstn = gpio_o[40];
   assign lmix_rstn = gpio_o[36];
@@ -294,7 +295,6 @@ module system_top (
     .rx_core_clk_0 (rx_ref_core_clk0),
     .rx_sync_0 (rx_sync),
     .rx_sysref_0 (sysref),
-    .cnv (adccnv),
 
     .tx_data_1_0_n (dac_data_n[0]),
     .tx_data_1_0_p (dac_data_p[0]),

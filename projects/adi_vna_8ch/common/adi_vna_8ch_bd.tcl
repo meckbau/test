@@ -208,8 +208,6 @@ create_bd_port -dir I ndac_spi_sdo_i
 create_bd_port -dir O ndac_spi_sdo_o
 create_bd_port -dir I ndac_spi_sdi_i
 
-create_bd_port -dir O cnv
-
 # spi instances
 
 ad_ip_instance axi_quad_spi axi_fpga_bus0
@@ -246,18 +244,6 @@ ad_ip_instance axi_quad_spi axi_spi_ndac
 ad_ip_parameter axi_spi_ndac CONFIG.C_USE_STARTUP 0
 ad_ip_parameter axi_spi_ndac CONFIG.C_NUM_SS_BITS 1
 ad_ip_parameter axi_spi_ndac CONFIG.C_SCK_RATIO 4
-
-
-# PWM Generator
-ad_ip_instance axi_pwm_gen axi_pwm_gen
-ad_ip_parameter axi_pwm_gen CONFIG.N_PWMS 1
-ad_ip_parameter axi_pwm_gen CONFIG.PULSE_0_WIDTH 1
-ad_ip_parameter axi_pwm_gen CONFIG.PULSE_0_PERIOD 8
-
-ad_connect cnv             axi_pwm_gen/pwm_0
-ad_connect sys_cpu_resetn  axi_pwm_gen/s_axi_aresetn
-ad_connect sys_cpu_clk     axi_pwm_gen/s_axi_aclk
-ad_connect sys_cpu_clk     axi_pwm_gen/ext_clk
 
 # spi connections
 
@@ -333,7 +319,6 @@ ad_cpu_interconnect 0x48300000 axi_spi_fmcdac
 ad_cpu_interconnect 0x48400000 axi_spi_fpga_busf
 ad_cpu_interconnect 0x48500000 axi_spim
 ad_cpu_interconnect 0x48600000 axi_spi_ndac
-ad_cpu_interconnect 0x48700000 axi_pwm_gen
 
 ad_cpu_interconnect 0x44B60000 dac_jesd204_xcvr
 ad_cpu_interconnect 0x44B04000 dac_jesd204_transport
