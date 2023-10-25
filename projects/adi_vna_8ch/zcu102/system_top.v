@@ -206,7 +206,6 @@ module system_top (
   assign fpga_busf_sfl = gpio_o[50];
   assign spare_gpiox = gpio_o[49];
   assign seq_shdnn = 1'b1;
-  //assign seq_shdnn = gpio_o[48];
 
   assign adccnv = spiad_csn_s[0];
   assign adcmon_rstn = gpio_o[41];
