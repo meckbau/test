@@ -84,18 +84,20 @@ module system_top #(
 
   input           otg_vbusoc,
 
-  // ad463x SPI configuration interface
+ // adaq42xx SPI configuration interface
 
-  input [NUM_OF_SDI-1:0]  ad463x_spi_sdi,
-  output          ad463x_spi_sdo,
-  output          ad463x_spi_sclk,
-  output          ad463x_spi_cs,
+  input [NUM_OF_SDI-1:0]  ad463x_adaq42xx_spi_sdi,
+  output          ad463x_adaq42xx_spi_sdo,
+  output          ad463x_adaq42xx_spi_sclk,
+  output          ad463x_adaq42xx_spi_cs,
 
-  input           ad463x_echo_sclk,
-  input           ad463x_ext_clk,
-  output          ad463x_cnv,
-  input           ad463x_busy,
-  inout           ad463x_resetn
+  input           ad463x_adaq42xx_echo_sclk,
+  input           ad463x_adaq42xx_ext_clk,
+  output          ad463x_adaq42xx_cnv,
+  input           ad463x_adaq42xx_busy,
+  inout           ad463x_adaq42xx_resetn,
+
+  inout   [ 1:0]  adaq42xx_pgia_mux
 );
 
   // internal signals
@@ -110,18 +112,18 @@ module system_top #(
   wire    [ 1:0]  iic_mux_sda_i_s;
   wire    [ 1:0]  iic_mux_sda_o_s;
   wire            iic_mux_sda_t_s;
-  wire            ad463x_echo_sclk_s;
+  wire            ad463x_adaq42xx_echo_sclk_s;
 
   // instantiations
 
-  assign gpio_i[63:33] = 31'b0;
+  assign gpio_i[63:35] = 29'b0;
 
   ad_data_clk #(
     .SINGLE_ENDED (1)
   ) i_ext_clk (
     .rst (1'b0),
     .locked (),
-    .clk_in_p (ad463x_ext_clk),
+    .clk_in_p (ad463x_adaq42xx_ext_clk),
     .clk_in_n (1'b0),
     .clk (ext_clk_s));
 
@@ -130,17 +132,18 @@ module system_top #(
   ) i_echo_sclk (
     .rst (1'b0),
     .locked (),
-    .clk_in_p (ad463x_echo_sclk),
+    .clk_in_p (ad463x_adaq42xx_echo_sclk),
     .clk_in_n (1'b0),
-    .clk (ad463x_echo_sclk_s));
+    .clk (ad463x_adaq42xx_echo_sclk_s));
 
   ad_iobuf #(
-    .DATA_WIDTH(1)
-  ) i_ad463x_gpio_iobuf (
-    .dio_t(gpio_t[32]),
-    .dio_i(gpio_o[32]),
-    .dio_o(gpio_i[32]),
-    .dio_p(ad463x_resetn));
+    .DATA_WIDTH(3)
+  ) i_ad463x_adaq42xx_gpio_iobuf (
+    .dio_t(gpio_t[34:32]),
+    .dio_i(gpio_o[34:32]),
+    .dio_o(gpio_i[34:32]),
+    .dio_p ({adaq42xx_pgia_mux,         // 34:33 
+             ad463x_adaq42xx_resetn})); // 32
 
   ad_iobuf #(
     .DATA_WIDTH(32)
@@ -227,14 +230,14 @@ module system_top #(
     .spi1_sdi_i (1'b0),
     .spi1_sdo_i (1'b0),
     .spi1_sdo_o (),
-    .ad463x_spi_sdo (ad463x_spi_sdo),
-    .ad463x_spi_sdi (ad463x_spi_sdi),
-    .ad463x_spi_cs (ad463x_spi_cs),
-    .ad463x_spi_sclk (ad463x_spi_sclk),
-    .ad463x_echo_sclk (ad463x_echo_sclk_s),
-    .ad463x_busy (ad463x_busy),
-    .ad463x_cnv (ad463x_cnv),
-    .ad463x_ext_clk (ext_clk_s),
+    .ad463x_adaq42xx_spi_sdo (ad463x_adaq42xx_spi_sdo),
+    .ad463x_adaq42xx_spi_sdi (ad463x_adaq42xx_spi_sdi),
+    .ad463x_adaq42xx_spi_cs (ad463x_adaq42xx_spi_cs),
+    .ad463x_adaq42xx_spi_sclk (ad463x_adaq42xx_spi_sclk),
+    .ad463x_adaq42xx_echo_sclk (ad463x_adaq42xx_echo_sclk_s),
+    .ad463x_adaq42xx_busy (ad463x_adaq42xx_busy),
+    .ad463x_adaq42xx_cnv (ad463x_adaq42xx_cnv),
+    .ad463x_adaq42xx_ext_clk (ext_clk_s),
     .otg_vbusoc (otg_vbusoc),
     .spdif (spdif));
 
