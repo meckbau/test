@@ -17,6 +17,10 @@ set_property -dict {PACKAGE_PIN L18 IOSTANDARD LVCMOS25} [get_ports ad463x_adaq4
 set_property -dict {PACKAGE_PIN J21 IOSTANDARD LVCMOS25} [get_ports adaq42xx_pgia_mux[0]]               ; ## G12  FMC-LA08_P
 set_property -dict {PACKAGE_PIN J22 IOSTANDARD LVCMOS25} [get_ports adaq42xx_pgia_mux[1]]               ; ## G13  FMC-LA08_N
 
+set_property -dict {PACKAGE_PIN T16 IOSTANDARD LVCMOS25} [get_ports max17687_rst]                       ; ## H13  FMC-LA07_P
+set_property -dict {PACKAGE_PIN T17 IOSTANDARD LVCMOS25} [get_ports max17687_en]                        ; ## H14  FMC-LA07_N
+set_property -dict {PACKAGE_PIN B20 IOSTANDARD LVCMOS25} [get_ports max17687_sync_clk]                  ; ## D21  FMC-LA17_N_CC
+
 # external clock, that drives the CNV generator, must have a maximum 100 MHz frequency
 create_clock -period 10.000 -name cnv_ext_clk [get_ports ad463x_adaq42xx_ext_clk]
 
