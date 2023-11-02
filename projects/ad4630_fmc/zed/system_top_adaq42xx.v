@@ -97,7 +97,11 @@ module system_top #(
   input           ad463x_adaq42xx_busy,
   inout           ad463x_adaq42xx_resetn,
 
-  inout   [ 1:0]  adaq42xx_pgia_mux
+  inout   [ 1:0]  adaq42xx_pgia_mux,
+  
+  inout           max17687_rst,
+  output          max17687_en,
+  output          max17687_sync_clk
 );
 
   // internal signals
@@ -116,7 +120,8 @@ module system_top #(
 
   // instantiations
 
-  assign gpio_i[63:35] = 29'b0;
+  assign gpio_i[63:36] = 27'b0;
+  assign max17687_en = 1'b1;
 
   ad_data_clk #(
     .SINGLE_ENDED (1)
@@ -142,7 +147,8 @@ module system_top #(
     .dio_t(gpio_t[34:32]),
     .dio_i(gpio_o[34:32]),
     .dio_o(gpio_i[34:32]),
-    .dio_p ({adaq42xx_pgia_mux,         // 34:33 
+    .dio_p ({max17687_rst,              // 35
+             adaq42xx_pgia_mux,         // 34:33 
              ad463x_adaq42xx_resetn})); // 32
 
   ad_iobuf #(
@@ -238,6 +244,7 @@ module system_top #(
     .ad463x_adaq42xx_busy (ad463x_adaq42xx_busy),
     .ad463x_adaq42xx_cnv (ad463x_adaq42xx_cnv),
     .ad463x_adaq42xx_ext_clk (ext_clk_s),
+    .max17687_sync_clk (max17687_sync_clk),
     .otg_vbusoc (otg_vbusoc),
     .spdif (spdif));
 

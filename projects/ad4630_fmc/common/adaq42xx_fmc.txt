@@ -18,3 +18,7 @@ H04     CLK0_M2C_P  CLK             adaq42xx_ext_clk      LVCMOS25   #N/A
 G12     LA08_P      MUX_A0          adaq42xx_pgia_mux[0]  LVCMOS25   #N/A
 G13     LA08_N      MUX_A1          adaq42xx_pgia_mux[1]  LVCMOS25   #N/A
 
+H13     LA07_P      RST             max17687_rst          LVCMOS25   #N/A
+H14     LA07_N      EN              max17687_en           LVCMOS25   #N/A
+D21     LA17_CC_N   SYNCFMC         max17687_sync_clk     LVCMOS25   #N/A
+
