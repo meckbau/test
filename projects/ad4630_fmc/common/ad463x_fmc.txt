@@ -1,21 +1,21 @@
 FMC_pin FMC_port    Schematic_name  System_top_name       IOSTANDARD Termination
 
 # ad463x
-G06     LA00_CC_P   SCLK_FMC        ad463x_spi_sclk       LVCMOS25   #N/A
-G07     LA00_CC_N   CS_FMC          ad463x_spi_cs         LVCMOS25   #N/A
-C11     LA06_N      SDI_FMC         ad463x_spi_sdo        LVCMOS25   #N/A
-H07     LA02_P      SDO0_FMC        ad463x_spi_sdi[0]     LVCMOS25   #N/A
-H08     LA02_N      SDO1_FMC        ad463x_spi_sdi[1]     LVCMOS25   #N/A
-G09     LA03_P      SDO2_FMC        ad463x_spi_sdi[2]     LVCMOS25   #N/A
-G10     LA03_N      SDO3_FMC        ad463x_spi_sdi[3]     LVCMOS25   #N/A
-H10     LA04_P      SDO4_FMC        ad463x_spi_sdi[4]     LVCMOS25   #N/A
-H11     LA04_N      SDO5_FMC        ad463x_spi_sdi[5]     LVCMOS25   #N/A
-D11     LA05_P      SDO6_FMC        ad463x_spi_sdi[6]     LVCMOS25   #N/A
-D12     LA05_N      SDO7_FMC        ad463x_spi_sdi[7]     LVCMOS25   #N/A
+G06     LA00_CC_P   SCLK_FMC        ad4x3x_spi_sclk       LVCMOS25   #N/A
+G07     LA00_CC_N   CS_FMC          ad4x3x_spi_cs         LVCMOS25   #N/A
+C11     LA06_N      SDI_FMC         ad4x3x_spi_sdo        LVCMOS25   #N/A
+H07     LA02_P      SDO0_FMC        ad4x3x_spi_sdi[0]     LVCMOS25   #N/A
+H08     LA02_N      SDO1_FMC        ad4x3x_spi_sdi[1]     LVCMOS25   #N/A
+G09     LA03_P      SDO2_FMC        ad4x3x_spi_sdi[2]     LVCMOS25   #N/A
+G10     LA03_N      SDO3_FMC        ad4x3x_spi_sdi[3]     LVCMOS25   #N/A
+H10     LA04_P      SDO4_FMC        ad4x3x_spi_sdi[4]     LVCMOS25   #N/A
+H11     LA04_N      SDO5_FMC        ad4x3x_spi_sdi[5]     LVCMOS25   #N/A
+D11     LA05_P      SDO6_FMC        ad4x3x_spi_sdi[6]     LVCMOS25   #N/A
+D12     LA05_N      SDO7_FMC        ad4x3x_spi_sdi[7]     LVCMOS25   #N/A
 
-D20     LA17_CC_p   SCK_OUT_FMC     ad463x_echo_sclk      LVCMOS25   #N/A
-D09     LA01_CC_N   RESET_FMC       ad463x_resetn         LVCMOS25   #N/A
-D08     LA01_CC_P   CNV_FMC         ad463x_cnv            LVCMOS25   #N/A
-C22     LA18_CC_P   BUSY_FMC        ad463x_busy           LVCMOS25   #N/A
-H04     CLK0_M2C_P  CLK             ad463x_ext_clk        LVCMOS25   #N/A
+D20     LA17_CC_p   SCK_OUT_FMC     ad4x3x_echo_sclk      LVCMOS25   #N/A
+D09     LA01_CC_N   RESET_FMC       ad4x3x_resetn         LVCMOS25   #N/A
+D08     LA01_CC_P   CNV_FMC         ad4x3x_cnv            LVCMOS25   #N/A
+C22     LA18_CC_P   BUSY_FMC        ad4x3x_busy           LVCMOS25   #N/A
+H04     CLK0_M2C_P  CLK             ad4x3x_ext_clk        LVCMOS25   #N/A
 

@@ -4,13 +4,11 @@
 ## Auto-generated, do not modify!
 ####################################################################################
 
-PROJECT_NAME := ad463x_adaq42xx_fmc_zed
+PROJECT_NAME := ad4x3x_fmc_zed
 
-M_DEPS += system_constr_8sdi.xdc
-M_DEPS += system_constr_4sdi.xdc
-M_DEPS += system_constr_2sdi.xdc
-M_DEPS += system_constr_1sdi.xdc
-M_DEPS += ../common/ad463x_adaq42xx_bd.tcl
+M_DEPS += system_constr.xdc
+M_DEPS += system_constr.tcl
+M_DEPS += ../common/ad4x3x_bd.tcl
 M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/zed/zed_system_constr.xdc
 M_DEPS += ../../common/zed/zed_system_bd.tcl

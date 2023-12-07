@@ -84,21 +84,21 @@ module system_top #(
 
   input           otg_vbusoc,
 
- // adaq42xx SPI configuration interface
+  // ad4x3x SPI configuration interface
 
-  input [NUM_OF_SDI-1:0]  ad463x_adaq42xx_spi_sdi,
-  output          ad463x_adaq42xx_spi_sdo,
-  output          ad463x_adaq42xx_spi_sclk,
-  output          ad463x_adaq42xx_spi_cs,
+  input   [7:0]   ad4x3x_spi_sdi,
+  output          ad4x3x_spi_sdo,
+  output          ad4x3x_spi_sclk,
+  output          ad4x3x_spi_cs,
 
-  input           ad463x_adaq42xx_echo_sclk,
-  input           ad463x_adaq42xx_ext_clk,
-  output          ad463x_adaq42xx_cnv,
-  input           ad463x_adaq42xx_busy,
-  inout           ad463x_adaq42xx_resetn,
+  input           ad4x3x_echo_sclk,
+  input           ad4x3x_ext_clk,
+  output          ad4x3x_cnv,
+  input           ad4x3x_busy,
+  inout           ad4x3x_resetn,
 
   inout   [ 1:0]  adaq42xx_pgia_mux,
-  
+
   inout           max17687_rst,
   output          max17687_en,
   output          max17687_sync_clk
@@ -116,7 +116,10 @@ module system_top #(
   wire    [ 1:0]  iic_mux_sda_i_s;
   wire    [ 1:0]  iic_mux_sda_o_s;
   wire            iic_mux_sda_t_s;
-  wire            ad463x_adaq42xx_echo_sclk_s;
+  wire    [ 7-NUM_OF_SDI:0]  sdi_nc;
+  wire            ad4x3x_echo_sclk_s;
+
+  assign sni_nc = 0;
 
   // instantiations
 
@@ -128,7 +131,7 @@ module system_top #(
   ) i_ext_clk (
     .rst (1'b0),
     .locked (),
-    .clk_in_p (ad463x_adaq42xx_ext_clk),
+    .clk_in_p (ad4x3x_ext_clk),
     .clk_in_n (1'b0),
     .clk (ext_clk_s));
 
@@ -137,19 +140,19 @@ module system_top #(
   ) i_echo_sclk (
     .rst (1'b0),
     .locked (),
-    .clk_in_p (ad463x_adaq42xx_echo_sclk),
+    .clk_in_p (ad4x3x_echo_sclk),
     .clk_in_n (1'b0),
-    .clk (ad463x_adaq42xx_echo_sclk_s));
+    .clk (ad4x3x_echo_sclk_s));
 
   ad_iobuf #(
-    .DATA_WIDTH(3)
-  ) i_ad463x_adaq42xx_gpio_iobuf (
-    .dio_t(gpio_t[34:32]),
-    .dio_i(gpio_o[34:32]),
-    .dio_o(gpio_i[34:32]),
-    .dio_p ({max17687_rst,              // 35
-             adaq42xx_pgia_mux,         // 34:33 
-             ad463x_adaq42xx_resetn})); // 32
+    .DATA_WIDTH(4)
+  ) i_ad4x3x_gpio_iobuf (
+    .dio_t(gpio_t[35:32]),
+    .dio_i(gpio_o[35:32]),
+    .dio_o(gpio_i[35:32]),
+    .dio_p ({max17687_rst,      // 35
+             adaq42xx_pgia_mux, // 34:33
+             ad4x3x_resetn}));  // 32
 
   ad_iobuf #(
     .DATA_WIDTH(32)
@@ -236,14 +239,14 @@ module system_top #(
     .spi1_sdi_i (1'b0),
     .spi1_sdo_i (1'b0),
     .spi1_sdo_o (),
-    .ad463x_adaq42xx_spi_sdo (ad463x_adaq42xx_spi_sdo),
-    .ad463x_adaq42xx_spi_sdi (ad463x_adaq42xx_spi_sdi),
-    .ad463x_adaq42xx_spi_cs (ad463x_adaq42xx_spi_cs),
-    .ad463x_adaq42xx_spi_sclk (ad463x_adaq42xx_spi_sclk),
-    .ad463x_adaq42xx_echo_sclk (ad463x_adaq42xx_echo_sclk_s),
-    .ad463x_adaq42xx_busy (ad463x_adaq42xx_busy),
-    .ad463x_adaq42xx_cnv (ad463x_adaq42xx_cnv),
-    .ad463x_adaq42xx_ext_clk (ext_clk_s),
+    .ad4x3x_spi_sdo (ad4x3x_spi_sdo),
+    .ad4x3x_spi_sdi ({sdi_nc,ad4x3x_spi_sdi}),
+    .ad4x3x_spi_cs (ad4x3x_spi_cs),
+    .ad4x3x_spi_sclk (ad4x3x_spi_sclk),
+    .ad4x3x_echo_sclk (ad4x3x_echo_sclk_s),
+    .ad4x3x_busy (ad4x3x_busy),
+    .ad4x3x_cnv (ad4x3x_cnv),
+    .ad4x3x_ext_clk (ext_clk_s),
     .max17687_sync_clk (max17687_sync_clk),
     .otg_vbusoc (otg_vbusoc),
     .spdif (spdif));

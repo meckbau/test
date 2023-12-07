@@ -5,13 +5,13 @@
 
 source $ad_hdl_dir/library/spi_engine/scripts/spi_engine.tcl
 # system level parameters
-set AD463X_ADAQ42XX_N $ad_project_params(AD463X_ADAQ42XX_N)
+set AD463X_AD403X_N $ad_project_params(AD463X_AD403X_N)
 set NUM_OF_SDI  $ad_project_params(NUM_OF_SDI)
 set CAPTURE_ZONE $ad_project_params(CAPTURE_ZONE)
 set CLK_MODE $ad_project_params(CLK_MODE)
 set DDR_EN $ad_project_params(DDR_EN)
 
-puts "build parameters: AD463X_ADAQ42XX_N: $AD463X_ADAQ42XX_N ; NUM_OF_SDI: $NUM_OF_SDI ; CAPTURE_ZONE: $CAPTURE_ZONE ; CLK_MODE: $CLK_MODE ;DDR_EN: $DDR_EN"
+puts "build parameters: AD463X_AD403X_N: $AD463X_AD403X_N ; NUM_OF_SDI: $NUM_OF_SDI ; CAPTURE_ZONE: $CAPTURE_ZONE ; CLK_MODE: $CLK_MODE ;DDR_EN: $DDR_EN"
 
 # block design ports and interfaces
 # specify the CNV generator's reference clock frequency in MHz
@@ -25,17 +25,17 @@ set adc_sampling_rate 1000000
 # specify the MAX17687 and LT8608 SYNC signal frequency (400KHz)
 set max17687_sync_freq 400000
 
-#create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_master_rtl:1.0 ad463x_adaq42xx_spi
+#create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_master_rtl:1.0 ad4x3x_spi
 
-create_bd_port -dir O ad463x_adaq42xx_spi_sclk
-create_bd_port -dir O ad463x_adaq42xx_spi_cs
-create_bd_port -dir O ad463x_adaq42xx_spi_sdo
-create_bd_port -dir I -from [expr $NUM_OF_SDI-1] -to 0 ad463x_adaq42xx_spi_sdi
+create_bd_port -dir O ad4x3x_spi_sclk
+create_bd_port -dir O ad4x3x_spi_cs
+create_bd_port -dir O ad4x3x_spi_sdo
+create_bd_port -dir I -from [expr $NUM_OF_SDI-1] -to 0 ad4x3x_spi_sdi
 
-create_bd_port -dir I ad463x_adaq42xx_echo_sclk
-create_bd_port -dir I ad463x_adaq42xx_busy
-create_bd_port -dir O ad463x_adaq42xx_cnv
-create_bd_port -dir I ad463x_adaq42xx_ext_clk
+create_bd_port -dir I ad4x3x_echo_sclk
+create_bd_port -dir I ad4x3x_busy
+create_bd_port -dir O ad4x3x_cnv
+create_bd_port -dir I ad4x3x_ext_clk
 
 create_bd_port -dir O max17687_sync_clk
 
@@ -50,7 +50,7 @@ ad_connect spi_clk spi_clkgen/clk_0
 
 # create a SPI Engine architecture
 
-#spi_engine_create "spi_ad463x_adaq42xx" 32         1             1       $NUM_OF_SDI 0          1
+#spi_engine_create "spi_ad4x3x" 32         1             1       $NUM_OF_SDI 0          1
 
 set data_width    32
 set async_spi_clk 1
@@ -60,7 +60,7 @@ set num_sdo       1
 set sdi_delay     1
 set echo_sclk     1
 
-set hier_spi_engine spi_ad463x_adaq42xx
+set hier_spi_engine spi_ad4x3x
 
 spi_engine_create $hier_spi_engine $data_width $async_spi_clk $num_cs $num_sdi $num_sdo $sdi_delay $echo_sclk
 
@@ -92,18 +92,25 @@ ad_ip_parameter sync_generator CONFIG.PULSE_0_PERIOD $max17687_cycle
 ad_ip_parameter sync_generator CONFIG.PULSE_0_WIDTH [expr int(ceil(double($max17687_cycle) / 2))]
 
 ad_ip_instance spi_axis_reorder data_reorder
-ad_ip_parameter data_reorder CONFIG.NUM_OF_LANES $NUM_OF_SDI
+switch $AD463X_AD403X_N {
+  0 {
+    ad_ip_parameter data_reorder CONFIG.NUM_OF_LANES [expr $NUM_OF_SDI *2]
+  }
+  1 {
+    ad_ip_parameter data_reorder CONFIG.NUM_OF_LANES $NUM_OF_SDI
+   }
+}
 
 # dma to receive data stream
 
-ad_ip_instance axi_dmac axi_ad463x_adaq42xx_dma
-ad_ip_parameter axi_ad463x_adaq42xx_dma CONFIG.DMA_TYPE_SRC 1
-ad_ip_parameter axi_ad463x_adaq42xx_dma CONFIG.DMA_TYPE_DEST 0
-ad_ip_parameter axi_ad463x_adaq42xx_dma CONFIG.CYCLIC 0
-ad_ip_parameter axi_ad463x_adaq42xx_dma CONFIG.AXI_SLICE_DEST 1
-ad_ip_parameter axi_ad463x_adaq42xx_dma CONFIG.AXI_SLICE_SRC 1
-ad_ip_parameter axi_ad463x_adaq42xx_dma CONFIG.DMA_DATA_WIDTH_SRC 64
-ad_ip_parameter axi_ad463x_adaq42xx_dma CONFIG.DMA_DATA_WIDTH_DEST 64
+ad_ip_instance axi_dmac axi_ad4x3x_dma
+ad_ip_parameter axi_ad4x3x_dma CONFIG.DMA_TYPE_SRC 1
+ad_ip_parameter axi_ad4x3x_dma CONFIG.DMA_TYPE_DEST 0
+ad_ip_parameter axi_ad4x3x_dma CONFIG.CYCLIC 0
+ad_ip_parameter axi_ad4x3x_dma CONFIG.AXI_SLICE_DEST 1
+ad_ip_parameter axi_ad4x3x_dma CONFIG.AXI_SLICE_SRC 1
+ad_ip_parameter axi_ad4x3x_dma CONFIG.DMA_DATA_WIDTH_SRC 64
+ad_ip_parameter axi_ad4x3x_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 
 # Trigger for SPI offload
 if {$CAPTURE_ZONE == 1} {
@@ -112,7 +119,7 @@ if {$CAPTURE_ZONE == 1} {
   #  is used for SDI latching
   switch $CLK_MODE {
     0 {
-      ad_connect $hier_spi_engine/echo_sclk ad463x_adaq42xx_echo_sclk
+      ad_connect $hier_spi_engine/echo_sclk ad4x3x_echo_sclk
     }
     1 -
     2 {
@@ -135,7 +142,7 @@ if {$CAPTURE_ZONE == 1} {
   ad_connect busy_capture/rst GND
   ad_connect $hier_spi_engine/${hier_spi_engine}_axi_regmap/spi_resetn busy_sync/out_resetn
 
-  ad_connect ad463x_adaq42xx_busy busy_sync/in_bits
+  ad_connect ad4x3x_busy busy_sync/in_bits
   ad_connect busy_sync/out_bits busy_capture/signal_in
   ad_connect $hier_spi_engine/trigger busy_capture/signal_out
   ## SDI is latched by the SPIE execution module
@@ -150,7 +157,7 @@ if {$CAPTURE_ZONE == 1} {
   ## SPI mode is using the echo SCLK, on echo SPI and Master mode the BUSY
   #  is used for SDI latching
 
-  ad_connect $hier_spi_engine/echo_sclk ad463x_adaq42xx_echo_sclk
+  ad_connect $hier_spi_engine/echo_sclk ad4x3x_echo_sclk
   switch $CLK_MODE {
     0 {
       ## SDI is latched by the SPIE execution module
@@ -164,9 +171,9 @@ if {$CAPTURE_ZONE == 1} {
       ad_ip_parameter data_capture CONFIG.NUM_OF_LANES $NUM_OF_SDI
 
       ad_connect spi_clk data_capture/clk
-      ad_connect ad463x_adaq42xx_spi_cs data_capture/csn
-      ad_connect ad463x_adaq42xx_busy data_capture/echo_sclk
-      ad_connect ad463x_adaq42xx_spi_sdi data_capture/data_in
+      ad_connect ad4x3x_spi_cs data_capture/csn
+      ad_connect ad4x3x_busy data_capture/echo_sclk
+      ad_connect ad4x3x_spi_sdi data_capture/data_in
 
       ad_connect data_capture/m_axis data_reorder/s_axis
 
@@ -183,7 +190,7 @@ if {$CAPTURE_ZONE == 1} {
   exit 2
 
 }
-ad_connect ad463x_adaq42xx_cnv cnv_generator/pwm_1
+ad_connect ad4x3x_cnv cnv_generator/pwm_1
 ad_connect max17687_sync_clk sync_generator/pwm_0
 
 # clocks
@@ -193,40 +200,40 @@ ad_connect $sys_cpu_clk cnv_generator/s_axi_aclk
 ad_connect $sys_cpu_clk sync_generator/s_axi_aclk
 ad_connect spi_clk $hier_spi_engine/spi_clk
 ad_connect spi_clk data_reorder/axis_aclk
-ad_connect spi_clk axi_ad463x_adaq42xx_dma/s_axis_aclk
-ad_connect ad463x_adaq42xx_ext_clk cnv_generator/ext_clk
-ad_connect ad463x_adaq42xx_ext_clk sync_generator/ext_clk
+ad_connect spi_clk axi_ad4x3x_dma/s_axis_aclk
+ad_connect ad4x3x_ext_clk cnv_generator/ext_clk
+ad_connect ad4x3x_ext_clk sync_generator/ext_clk
 
 # resets
 
 ad_connect $sys_cpu_resetn cnv_generator/s_axi_aresetn
 ad_connect data_reorder/axis_aresetn VCC
 ad_connect $sys_cpu_resetn $hier_spi_engine/resetn
-ad_connect $sys_cpu_resetn axi_ad463x_adaq42xx_dma/m_dest_axi_aresetn
+ad_connect $sys_cpu_resetn axi_ad4x3x_dma/m_dest_axi_aresetn
 
 # data path
 
-ad_connect  $hier_spi_engine/${hier_spi_engine}_execution/cs ad463x_adaq42xx_spi_cs
-ad_connect  $hier_spi_engine/${hier_spi_engine}_execution/sclk ad463x_adaq42xx_spi_sclk
-ad_connect  $hier_spi_engine/${hier_spi_engine}_execution/sdo ad463x_adaq42xx_spi_sdo
-ad_connect  $hier_spi_engine/${hier_spi_engine}_execution/sdi ad463x_adaq42xx_spi_sdi
+ad_connect  $hier_spi_engine/${hier_spi_engine}_execution/cs ad4x3x_spi_cs
+ad_connect  $hier_spi_engine/${hier_spi_engine}_execution/sclk ad4x3x_spi_sclk
+ad_connect  $hier_spi_engine/${hier_spi_engine}_execution/sdo ad4x3x_spi_sdo
+ad_connect  $hier_spi_engine/${hier_spi_engine}_execution/sdi ad4x3x_spi_sdi
 
-ad_connect  axi_ad463x_adaq42xx_dma/s_axis data_reorder/m_axis
+ad_connect  axi_ad4x3x_dma/s_axis data_reorder/m_axis
 
 # AXI memory mapped address space
 
 ad_cpu_interconnect 0x44a00000 $hier_spi_engine/${hier_spi_engine}_axi_regmap
 ad_cpu_interconnect 0x44b00000 cnv_generator
 ad_cpu_interconnect 0x44c00000 sync_generator
-ad_cpu_interconnect 0x44a30000 axi_ad463x_adaq42xx_dma
+ad_cpu_interconnect 0x44a30000 axi_ad4x3x_dma
 ad_cpu_interconnect 0x44a70000 spi_clkgen
 
 # interrupts
 
-ad_cpu_interrupt "ps-13" "mb-13" axi_ad463x_adaq42xx_dma/irq
+ad_cpu_interrupt "ps-13" "mb-13" axi_ad4x3x_dma/irq
 ad_cpu_interrupt "ps-12" "mb-12" $hier_spi_engine/irq
 
 # interconnect to memory interface
 
 ad_mem_hp2_interconnect sys_cpu_clk sys_ps7/S_AXI_HP2
-ad_mem_hp2_interconnect sys_cpu_clk axi_ad463x_adaq42xx_dma/m_dest_axi
+ad_mem_hp2_interconnect sys_cpu_clk axi_ad4x3x_dma/m_dest_axi

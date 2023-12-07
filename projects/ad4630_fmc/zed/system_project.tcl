@@ -13,10 +13,15 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #   How to use over-writable parameters from the environment:
 #
 #    e.g.
-#      make AD463X_ADAQ42XX_N=1 NUM_OF_SDI=4  CAPTURE_ZONE=2
+#      make AD463X_AD403X_N=1 NUM_OF_SDI=4  CAPTURE_ZONE=2
 #
 #
 # Parameter description:
+#
+# AD463X_AD403X_N: Chip identifier
+# 
+#   0 - AD403x or ADAQ42xx
+#   1 - AD463x
 #
 # CLK_MODE : Clocking mode of the device's digital interface
 #
@@ -45,77 +50,24 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #
 # Example:
 #
-#   make AD463X_ADAQ42XX_N=1 NUM_OF_SDI=2 CAPTURE_ZONE=2 CLK_MODE=0 DR_EN=0
+#   make AD463X_AD403X_N=1 NUM_OF_SDI=2 CAPTURE_ZONE=2 CLK_MODE=0 DDR_EN=0
 #
 
-set AD463X_ADAQ42XX_N [get_env_param AD463X_ADAQ42XX_N 1]
+set AD463X_AD403X_N [get_env_param AD463X_AD403X_N 1]
 
-adi_project ad463x_adaq42xx_fmc_zed 0 [list \
-  AD463X_ADAQ42XX_N [get_env_param AD463X_ADAQ42XX_N  1] \
-  CLK_MODE          [get_env_param CLK_MODE           0] \
-  NUM_OF_SDI        [get_env_param NUM_OF_SDI         4] \
-  CAPTURE_ZONE      [get_env_param CAPTURE_ZONE       2] \
-  DDR_EN            [get_env_param DDR_EN             0] ]
+adi_project ad4x3x_fmc_zed 0 [list \
+  AD463X_AD403X_N [get_env_param AD463X_AD403X_N    1] \
+  CLK_MODE        [get_env_param CLK_MODE           0] \
+  NUM_OF_SDI      [get_env_param NUM_OF_SDI         4] \
+  CAPTURE_ZONE    [get_env_param CAPTURE_ZONE       2] \
+  DDR_EN          [get_env_param DDR_EN             0] ]
 
+adi_project_files ad4x3x_fmc_zed [list \
+  "$ad_hdl_dir/library/common/ad_iobuf.v" \
+  "$ad_hdl_dir/library/xilinx/common/ad_data_clk.v" \
+  "$ad_hdl_dir/projects/common/zed/zed_system_constr.xdc" \
+  "system_constr.xdc" \
+  "system_constr.tcl" \
+  "system_top.v" ]
 
-if {$AD463X_ADAQ42XX_N == 1} {
-  adi_project_files ad463x_adaq42xx_fmc_zed [list \
-    "$ad_hdl_dir/library/common/ad_iobuf.v" \
-    "$ad_hdl_dir/library/xilinx/common/ad_data_clk.v" \
-    "$ad_hdl_dir/projects/common/zed/zed_system_constr.xdc" \
-    "system_constr_ad463x.xdc" \
-    "system_top_ad463x.v" ]
-
-  switch [get_env_param NUM_OF_SDI 4] {
-    1 {
-      adi_project_files ad463x_adaq42xx_fmc_zed [list \
-        "system_constr_1sdi.xdc" ]
-    }
-    2 {
-      adi_project_files ad463x_adaq42xx_fmc_zed [list \
-        "system_constr_2sdi.xdc" ]
-    }
-    4 {
-      adi_project_files ad463x_adaq42xx_fmc_zed [list \
-        "system_constr_4sdi.xdc" ]
-    }
-    8 {
-      adi_project_files ad463x_adaq42xx_fmc_zed [list \
-        "system_constr_8sdi.xdc" ]
-    }
-    default {
-      adi_project_files ad463x_adaq42xx_fmc_zed [list \
-        "system_constr_2sdi.xdc" ]
-    }
-  }
-} elseif {$AD463X_ADAQ42XX_N == 0} {
-  adi_project_files ad463x_adaq42xx_fmc_zed [list \
-    "$ad_hdl_dir/library/common/ad_iobuf.v" \
-    "$ad_hdl_dir/library/xilinx/common/ad_data_clk.v" \
-    "$ad_hdl_dir/projects/common/zed/zed_system_constr.xdc" \
-    "system_constr_adaq42xx.xdc" \
-    "system_top_adaq42xx.v" ]
-
-  switch [get_env_param NUM_OF_SDI 4] {
-    1 {
-      adi_project_files ad463x_adaq42xx_fmc_zed [list \
-        "system_constr_1sdi.xdc" ]
-    }
-    2 {
-      adi_project_files ad463x_adaq42xx_fmc_zed [list \
-        "system_constr_2sdi.xdc" ]
-    }
-    4 {
-      adi_project_files ad463x_adaq42xx_fmc_zed [list \
-        "system_constr_4sdi.xdc" ]
-    }
-    default {
-      adi_project_files ad463x_adaq42xx_fmc_zed [list \
-        "system_constr_4sdi.xdc" ]
-    }
-  }
-} else {
-  return -code error [format "ERROR: Invalid eval board type! ..."]
-}
-
-adi_project_run ad463x_adaq42xx_fmc_zed
+adi_project_run ad4x3x_fmc_zed
