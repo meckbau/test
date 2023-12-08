@@ -82,10 +82,25 @@ module system_top (
   inout   [ 1:0]  iic_mux_sda,
 
   input           otg_vbusoc
+
+  input           adc_clk_in_n,
+  input           adc_clk_in_p,
+  input   [ 7:0]  adc_data_in_n,
+  input   [ 7:0]  adc_data_in_p,
+  input           adc_data_or_n,
+  input           adc_data_or_p,
+  output          spi_clk,
+  output          spi_csn_adc,
+  output          spi_csn_clk,
+  inout           spi_sdio
 );
 
   // internal signals
 
+  wire    [ 1:0]  spi_csn; // not sure if it's necessearry 
+  wire            spi_miso;
+  wire            spi_mosi;
+  
   wire    [63:0]  gpio_i;
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
@@ -95,10 +110,25 @@ module system_top (
   wire    [ 1:0]  iic_mux_sda_i_s;
   wire    [ 1:0]  iic_mux_sda_o_s;
   wire            iic_mux_sda_t_s;
+  
+  wire    [ 2:0]  spi0_csn;
+  wire            spi0_clk;
+  wire            spi0_mosi;
+  wire            spi0_miso;
+  wire    [ 2:0]  spi1_csn;
+  wire            spi1_clk;
+  wire            spi1_mosi;
+  wire            spi1_miso;
 
   assign gpio_i[63:32] = gpio_o[63:32];
 
   // instantiations
+
+  assign spi_csn_adc = spi0_csn[0];
+  assign spi_csn_clk = spi0_csn[1];
+  assign spi_clk = spi0_clk;
+  assign spi_mosi = spi0_mosi;
+  assign spi0_miso = spi_miso;
 
   ad_iobuf #(
     .DATA_WIDTH (32)
@@ -123,6 +153,13 @@ module system_top (
     .dio_i (iic_mux_sda_o_s),
     .dio_o (iic_mux_sda_i_s),
     .dio_p (iic_mux_sda));
+
+  ad9265_spi i_spi (
+    .spi_csn(spi0_csn[1:0]),
+    .spi_clk(spi_clk),
+    .spi_mosi(spi_mosi),
+    .spi_miso(spi_miso),
+    .spi_sdio(spi_sdio));
 
   system_wrapper i_system_wrapper (
     .ddr_addr (ddr_addr),
@@ -176,23 +213,30 @@ module system_top (
 
     .otg_vbusoc (otg_vbusoc),
 
-    .spi0_clk_i (1'b0),
-    .spi0_clk_o (),
-    .spi0_csn_0_o (),
-    .spi0_csn_1_o (),
-    .spi0_csn_2_o (),
+    .adc_clk_in_n(adc_clk_in_n),
+    .adc_clk_in_p(adc_clk_in_p),
+    .adc_data_in_n(adc_data_in_n),
+    .adc_data_in_p(adc_data_in_p),
+    .adc_data_or_n(adc_data_or_n),
+    .adc_data_or_p(adc_data_or_p),
+
+    .spi0_clk_i (spi0_clk),
+    .spi0_clk_o (spi0_clk),
+    .spi0_csn_0_o (spi0_csn[0]),
+    .spi0_csn_1_o (spi0_csn[1]),
+    .spi0_csn_2_o (spi0_csn[2]),
     .spi0_csn_i (1'b1),
-    .spi0_sdi_i (1'b0),
-    .spi0_sdo_i (1'b0),
-    .spi0_sdo_o (),
-    .spi1_clk_i (1'b0),
-    .spi1_clk_o (),
-    .spi1_csn_0_o (),
-    .spi1_csn_1_o (),
-    .spi1_csn_2_o (),
+    .spi0_sdi_i (spi0_miso),
+    .spi0_sdo_i (spi0_mosi),
+    .spi0_sdo_o (spi0_mosi),
+    .spi1_clk_i (spi1_clk),
+    .spi1_clk_o (spi1_clk),
+    .spi1_csn_0_o (spi1_csn[0]),
+    .spi1_csn_1_o (spi1_csn[1]),
+    .spi1_csn_2_o (spi1_csn[2]),
     .spi1_csn_i (1'b1),
-    .spi1_sdi_i (1'b0),
-    .spi1_sdo_i (1'b0),
-    .spi1_sdo_o ());
+    .spi1_sdi_i (1'b1),
+    .spi1_sdo_i (spi1_mosi),
+    .spi1_sdo_o (spi1_mosi));
 
 endmodule
