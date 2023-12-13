@@ -239,7 +239,7 @@ The Software GPIO number is calculated as follows:
      -
      - Zynq-7000
    * - adc_serpar
-     - INOUT
+     - OUT
      - 39
      - 93
    * - adc_refsel *
@@ -247,23 +247,23 @@ The Software GPIO number is calculated as follows:
      - 38
      - 92
    * - adc_first_data **
-     - INOUT
+     - IN
      - 38
      - 92
    * - adc_reset
-     - INOUT
+     - OUT
      - 37
      - 91
    * - adc_stby
-     - INOUT
+     - OUT
      - 36
      - 90
    * - adc_range
-     - INOUT
+     - OUT
      - 35
      - 89
    * - adc_os
-     - INOUT
+     - OUT
      - 34:32
      - 88-86
 
