@@ -1,18 +1,14 @@
-###############################################################################
-
-## Copyright (C) 2023-2023 Analog Devices, Inc. All rights reserved.
-
+####################################################################################
+## Copyright (c) 2018 - 2023 Analog Devices, Inc.
 ### SPDX short identifier: BSD-1-Clause
-
 ## Auto-generated, do not modify!
-
-###############################################################################
+####################################################################################
 
 PROJECT_NAME := adi_vna_8ch_zcu102
 
+M_DEPS += timing_constr.xdc
 M_DEPS += ../common/adi_vna_8ch_bd.tcl
 M_DEPS += ../../scripts/adi_pd.tcl
-M_DEPS += ../../dac_fmc_ebz/common/dac_fmc_ebz_bd.tcl
 M_DEPS += ../../dac_fmc_ebz/common/config.tcl
 M_DEPS += ../../common/zcu102/zcu102_system_constr.xdc
 M_DEPS += ../../common/zcu102/zcu102_system_bd.tcl
@@ -24,7 +20,6 @@ M_DEPS += ../../../library/common/ad_iobuf.v
 M_DEPS += ../../../library/common/ad_edge_detect.v
 M_DEPS += ../../../library/common/ad_3w_spi.v
 
-LIB_DEPS += axi_clkgen
 LIB_DEPS += axi_dmac
 LIB_DEPS += axi_sysid
 LIB_DEPS += jesd204/ad_ip_jesd204_tpl_adc
