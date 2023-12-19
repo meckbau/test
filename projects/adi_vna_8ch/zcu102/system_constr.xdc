@@ -1,9 +1,6 @@
 ###############################################################################
-
-## Copyright (C) 2023-2023 Analog Devices, Inc. All rights reserved.
-
+## Copyright (C) 2023 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
-
 ###############################################################################
 
 ###############################################################################
@@ -155,5 +152,3 @@ set_property  -dict {PACKAGE_PIN  AA12 IOSTANDARD LVCMOS18} [get_ports ndac_sdi]
 
 # fix xcvr location assignment
 set_property LOC GTHE4_CHANNEL_X1Y10  [get_cells -hierarchical -filter {NAME =~ *util_ad9083_xcvr/inst/i_xch_0/i_gthe4_channel}]
-
-
