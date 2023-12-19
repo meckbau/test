@@ -17,7 +17,6 @@ adi_project_files adi_vna_8ch_zcu102 [list \
 source $ad_hdl_dir/projects/ad9083_evb/common/ad9083_evb_bd.tcl
 source $ad_hdl_dir/projects/common/xilinx/dacfifo_bd.tcl
 
-
 # DAC instances connections
 
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
@@ -144,8 +143,6 @@ ad_connect axi_dac_fifo/dma_valid dac_dma/m_axis_valid
 ad_connect axi_dac_fifo/dma_xfer_last dac_dma/m_axis_last
 
 ad_connect axi_dac_fifo/bypass dac_fifo_bypass
-
-# end of DAC instances connections
 
 # add spi interfaces
 
@@ -310,7 +307,6 @@ ad_connect  ndac_spi_clk_o  axi_spi_ndac/sck_o
 ad_connect  ndac_spi_sdo_i  axi_spi_ndac/io0_i
 ad_connect  ndac_spi_sdo_o  axi_spi_ndac/io0_o
 ad_connect  ndac_spi_sdi_i  axi_spi_ndac/io1_i
-
 
 # interconnect (cpu)
 ad_cpu_interconnect 0x48000000 axi_fpga_bus0
