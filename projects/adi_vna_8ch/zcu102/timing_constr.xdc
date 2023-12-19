@@ -1,13 +1,10 @@
 ###############################################################################
-
-## Copyright (C) 2023-2023 Analog Devices, Inc. All rights reserved.
-
+## Copyright (C) 2023 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
-
 ###############################################################################
 
 ### Timing constraints
-# clocks
+# Clocks
 create_clock -period 2 -name rx_ref_clk [get_ports ref_clk0_p]
 create_clock -period 8 -name rx_ref_clk2 [get_ports glblclk_p]
 
@@ -187,4 +184,3 @@ set_output_delay -clock fmcdac_sclk -max [expr $fmcdac_tsu + $fmcdac_tdata_trace
 set_output_delay -clock fmcdac_sclk -min [expr $fmcdac_tdata_trace_delay_min - $fmcdac_th - $fmcdac_tclk_trace_delay_max] [get_ports fmcdac_mosi];
 set_multicycle_path 4 -setup -start -from [get_clocks -of_objects [get_pins i_system_wrapper/system_i/axi_spi_fmcdac/ext_spi_clk]] -to fmcdac_sclk
 set_multicycle_path 3 -hold -from [get_clocks -of_objects [get_pins i_system_wrapper/system_i/axi_spi_fmcdac/ext_spi_clk]] -to fmcdac_sclk
-
