@@ -89,6 +89,7 @@ module system_top (
   input   [ 7:0]  adc_data_in_p,
   input           adc_data_or_n,
   input           adc_data_or_p,
+
   output          spi_clk,
   output          spi_csn_adc,
   output          spi_csn_clk,
@@ -122,13 +123,13 @@ module system_top (
 
   assign gpio_i[63:32] = gpio_o[63:32];
 
-  // instantiations
-
   assign spi_csn_adc = spi0_csn[0];
   assign spi_csn_clk = spi0_csn[1];
   assign spi_clk = spi0_clk;
   assign spi_mosi = spi0_mosi;
   assign spi0_miso = spi_miso;
+
+  // instantiations
 
   ad_iobuf #(
     .DATA_WIDTH (32)

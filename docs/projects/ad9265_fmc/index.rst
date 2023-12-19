@@ -30,9 +30,6 @@ Supported devices
 Supported carriers
 -------------------------------------------------------------------------------
 
-**\*At least one. Should be updated each time the project is ported to
-another carrier. Take these tables as an example:**\ \*
-
 .. list-table::
    :widths: 35 35 30
    :header-rows: 1
