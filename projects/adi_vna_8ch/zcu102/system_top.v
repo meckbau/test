@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2023 - 2023 (c) Analog Devices, Inc. All rights reserved.
+// Copyright 2023 (c) Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -81,19 +81,19 @@ module system_top (
   input                   sync1_n,
   input                   sync1_p,
 
-   // SPIs
+  // SPIs
   // SPI for AD9083
   output                  fpga_csb,
   output                  fpga_sck,
   output                  fpga_sdio,
   input                   fpga_sdo,
 
-  //SPI for AD4696
+  // SPI for AD4696
   output                  spiad_sck,
   input                   spiad_sdo,
   output                  spiad_sdi,
   output                  adcmon_csb,
-  output	          adccnv,
+  output                  adccnv,
 
   // SPI for ADF4372 and AD9528
   output                  fpga_bus0_sck,
@@ -148,7 +148,7 @@ module system_top (
   output                  adl5960x_sync1
 );
 
-  // internal signals
+  // Internal signals
   wire        [94:0]      gpio_i;
   wire        [94:0]      gpio_o;
   wire        [94:0]      gpio_t;
@@ -177,7 +177,7 @@ module system_top (
   wire                    spi_adl5960_1_mosi_s;
   wire                    spi_adl5960_1_miso_s;
 
-  // assignments
+  // Assignments
   assign fpga_csb = fpga_csn[0];
 
   assign fpga_bus0_csb_9528 = fpga_bus0_csn[1];
@@ -202,7 +202,7 @@ module system_top (
   assign spi_adl5960_1_csn7 = spi_adl5960_1_csn_s[6];
   assign spi_adl5960_1_csn8 = spi_adl5960_1_csn_s[7];
 
-  // gpios
+  // GPIOs
   assign fpga_busf_sfl = gpio_o[50];
   assign spare_gpiox = gpio_o[49];
   assign seq_shdnn = 1'b1;
@@ -222,8 +222,7 @@ module system_top (
   assign gpio_i[20: 8] = gpio_bd_i;
   assign gpio_bd_o = gpio_o[7:0];
 
-  // instantiations
-
+  // Instantiations
   IBUFDS IBUFDS_inst (
     .O(rx_ref_core_clk0_s),
     .I(glblclk_p),
@@ -272,13 +271,13 @@ module system_top (
     .O (rx_sync_p),
     .OB (rx_sync_n));
 
-  // reversed polarity on preliminary schematic
+  // Reversed polarity on preliminary schematic
   IBUFDS i_obufds_tx_sync0 (
     .I (sync0_n),
     .IB (sync0_p),
     .O (tx_sync0));
 
-  // reversed polarity on preliminary schematic
+  // Reversed polarity on preliminary schematic
   IBUFDS i_obufds_tx_sync1 (
     .I (sync1_n),
     .IB (sync1_p),
