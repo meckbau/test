@@ -170,13 +170,13 @@ create_bd_port -dir I spim_miso_i
 create_bd_port -dir O spim_miso_o
 create_bd_port -dir I spim_sdi_i
 
-create_bd_port -dir O -from 7 -to 0 spi_adl5960_1_csn_o
-create_bd_port -dir I -from 7 -to 0 spi_adl5960_1_csn_i
-create_bd_port -dir I spi_adl5960_1_clk_i
-create_bd_port -dir O spi_adl5960_1_clk_o
-create_bd_port -dir I spi_adl5960_1_sdo_i
-create_bd_port -dir O spi_adl5960_1_sdo_o
-create_bd_port -dir I spi_adl5960_1_sdi_i
+create_bd_port -dir O -from 7 -to 0 spi_adl5960_csn_o
+create_bd_port -dir I -from 7 -to 0 spi_adl5960_csn_i
+create_bd_port -dir I spi_adl5960_clk_i
+create_bd_port -dir O spi_adl5960_clk_o
+create_bd_port -dir I spi_adl5960_sdo_i
+create_bd_port -dir O spi_adl5960_sdo_o
+create_bd_port -dir I spi_adl5960_sdi_i
 
 create_bd_port -dir I spi_fpga_busf_csn_i
 create_bd_port -dir O spi_fpga_busf_csn_o
@@ -221,10 +221,10 @@ ad_ip_parameter axi_spim CONFIG.C_NUM_SS_BITS 2
 ad_ip_parameter axi_spim CONFIG.C_SCK_RATIO 16
 ad_ip_parameter axi_spim CONFIG.Multiples16 2
 
-ad_ip_instance axi_quad_spi axi_spi_adl5960_1
-ad_ip_parameter axi_spi_adl5960_1 CONFIG.C_USE_STARTUP 0
-ad_ip_parameter axi_spi_adl5960_1 CONFIG.C_NUM_SS_BITS 8
-ad_ip_parameter axi_spi_adl5960_1 CONFIG.C_SCK_RATIO 16
+ad_ip_instance axi_quad_spi axi_spi_adl5960
+ad_ip_parameter axi_spi_adl5960 CONFIG.C_USE_STARTUP 0
+ad_ip_parameter axi_spi_adl5960 CONFIG.C_NUM_SS_BITS 8
+ad_ip_parameter axi_spi_adl5960 CONFIG.C_SCK_RATIO 16
 
 ad_ip_instance axi_quad_spi axi_spi_fpga_busf
 ad_ip_parameter axi_spi_fpga_busf CONFIG.C_USE_STARTUP 0
@@ -272,14 +272,14 @@ ad_connect  spim_miso_i  axi_spim/io0_i
 ad_connect  spim_miso_o  axi_spim/io0_o
 ad_connect  spim_sdi_i  axi_spim/io1_i
 
-ad_connect  sys_cpu_clk  axi_spi_adl5960_1/ext_spi_clk
-ad_connect  spi_adl5960_1_csn_i  axi_spi_adl5960_1/ss_i
-ad_connect  spi_adl5960_1_csn_o  axi_spi_adl5960_1/ss_o
-ad_connect  spi_adl5960_1_clk_i  axi_spi_adl5960_1/sck_i
-ad_connect  spi_adl5960_1_clk_o  axi_spi_adl5960_1/sck_o
-ad_connect  spi_adl5960_1_sdo_i  axi_spi_adl5960_1/io0_i
-ad_connect  spi_adl5960_1_sdo_o  axi_spi_adl5960_1/io0_o
-ad_connect  spi_adl5960_1_sdi_i  axi_spi_adl5960_1/io1_i
+ad_connect  sys_cpu_clk  axi_spi_adl5960/ext_spi_clk
+ad_connect  spi_adl5960_csn_i  axi_spi_adl5960/ss_i
+ad_connect  spi_adl5960_csn_o  axi_spi_adl5960/ss_o
+ad_connect  spi_adl5960_clk_i  axi_spi_adl5960/sck_i
+ad_connect  spi_adl5960_clk_o  axi_spi_adl5960/sck_o
+ad_connect  spi_adl5960_sdo_i  axi_spi_adl5960/io0_i
+ad_connect  spi_adl5960_sdo_o  axi_spi_adl5960/io0_o
+ad_connect  spi_adl5960_sdi_i  axi_spi_adl5960/io1_i
 
 ad_connect  sys_cpu_clk  axi_spi_fpga_busf/ext_spi_clk
 ad_connect  spi_fpga_busf_csn_i  axi_spi_fpga_busf/ss_i
@@ -311,7 +311,7 @@ ad_connect  ndac_spi_sdi_i  axi_spi_ndac/io1_i
 # interconnect (cpu)
 ad_cpu_interconnect 0x48000000 axi_fpga_bus0
 ad_cpu_interconnect 0x48100000 axi_fpga_bus1
-ad_cpu_interconnect 0x48200000 axi_spi_adl5960_1
+ad_cpu_interconnect 0x48200000 axi_spi_adl5960
 ad_cpu_interconnect 0x48300000 axi_spi_fmcdac
 ad_cpu_interconnect 0x48400000 axi_spi_fpga_busf
 ad_cpu_interconnect 0x48500000 axi_spim
@@ -328,7 +328,7 @@ ad_cpu_interrupt ps-4  mb-11 dac_jesd204_link/irq
 ad_cpu_interrupt ps-5  mb-10 dac_dma/irq
 ad_cpu_interrupt ps-6  mb-10 axi_spi_ndac/ip2intc_irpt
 
-ad_cpu_interrupt ps-8  mb-7  axi_spi_adl5960_1/ip2intc_irpt
+ad_cpu_interrupt ps-8  mb-7  axi_spi_adl5960/ip2intc_irpt
 ad_cpu_interrupt ps-9  mb-6  axi_spi_fpga_busf/ip2intc_irpt
 ad_cpu_interrupt ps-10 mb-5  axi_fpga_bus1/ip2intc_irpt
 ad_cpu_interrupt ps-11 mb-4  axi_fpga_bus0/ip2intc_irpt

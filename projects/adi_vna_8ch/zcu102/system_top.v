@@ -100,7 +100,7 @@ module system_top (
   output                  fpga_bus0_sdi,
   input                   fpga_bus0_sdo,
   output                  fpga_bus0_cs_4372,
-  output                  fpga_bus0_csb_9528,
+  output                  fpga_bus0_cs_9528,
 
   // SPI for 2 x AD5720 and MAX7301
   output                  fpga_bus1_sck,
@@ -118,16 +118,16 @@ module system_top (
   output                  spim_csb_lo,
 
   // SPI for 8 x ADL5960
-  output                  spi_adl5960_1_sck,
-  inout                   spi_adl5960_1_sdio,
-  output                  spi_adl5960_1_csn1,
-  output                  spi_adl5960_1_csn2,
-  output                  spi_adl5960_1_csn3,
-  output                  spi_adl5960_1_csn4,
-  output                  spi_adl5960_1_csn5,
-  output                  spi_adl5960_1_csn6,
-  output                  spi_adl5960_1_csn7,
-  output                  spi_adl5960_1_csn8,
+  output                  spi_adl5960_sck,
+  inout                   spi_adl5960_sdio,
+  output                  spi_adl5960_csn1,
+  output                  spi_adl5960_csn2,
+  output                  spi_adl5960_csn3,
+  output                  spi_adl5960_csn4,
+  output                  spi_adl5960_csn5,
+  output                  spi_adl5960_csn6,
+  output                  spi_adl5960_csn7,
+  output                  spi_adl5960_csn8,
 
   // SPI for ADMV8818
   output                  fpga_busf_sck,
@@ -172,15 +172,15 @@ module system_top (
 
   wire         [ 2:0]     spiad_csn_s;
 
-  wire         [ 7:0]     spi_adl5960_1_csn_s;
-  wire                    spi_adl5960_1_clk_s;
-  wire                    spi_adl5960_1_mosi_s;
-  wire                    spi_adl5960_1_miso_s;
+  wire         [ 7:0]     spi_adl5960_csn_s;
+  wire                    spi_adl5960_clk_s;
+  wire                    spi_adl5960_mosi_s;
+  wire                    spi_adl5960_miso_s;
 
   // Assignments
   assign fpga_csb = fpga_csn[0];
 
-  assign fpga_bus0_csb_9528 = fpga_bus0_csn[1];
+  assign fpga_bus0_cs_9528 = fpga_bus0_csn[1];
   assign fpga_bus0_cs_4372 = fpga_bus0_csn[0];
 
   assign fpga_bus1_cs1 = fpga_bus1_csn[0];
@@ -192,15 +192,15 @@ module system_top (
 
   assign adcmon_csb = spiad_csn_s[0];
 
-  assign spi_adl5960_1_sck = spi_adl5960_1_clk_s;
-  assign spi_adl5960_1_csn1 = spi_adl5960_1_csn_s[0];
-  assign spi_adl5960_1_csn2 = spi_adl5960_1_csn_s[1];
-  assign spi_adl5960_1_csn3 = spi_adl5960_1_csn_s[2];
-  assign spi_adl5960_1_csn4 = spi_adl5960_1_csn_s[3];
-  assign spi_adl5960_1_csn5 = spi_adl5960_1_csn_s[4];
-  assign spi_adl5960_1_csn6 = spi_adl5960_1_csn_s[5];
-  assign spi_adl5960_1_csn7 = spi_adl5960_1_csn_s[6];
-  assign spi_adl5960_1_csn8 = spi_adl5960_1_csn_s[7];
+  assign spi_adl5960_sck = spi_adl5960_clk_s;
+  assign spi_adl5960_csn1 = spi_adl5960_csn_s[0];
+  assign spi_adl5960_csn2 = spi_adl5960_csn_s[1];
+  assign spi_adl5960_csn3 = spi_adl5960_csn_s[2];
+  assign spi_adl5960_csn4 = spi_adl5960_csn_s[3];
+  assign spi_adl5960_csn5 = spi_adl5960_csn_s[4];
+  assign spi_adl5960_csn6 = spi_adl5960_csn_s[5];
+  assign spi_adl5960_csn7 = spi_adl5960_csn_s[6];
+  assign spi_adl5960_csn8 = spi_adl5960_csn_s[7];
 
   // GPIOs
   assign fpga_busf_sfl = gpio_o[50];
@@ -248,12 +248,12 @@ module system_top (
 
   ad_3w_spi #(
     .NUM_OF_SLAVES(8)
-  ) i_spi_adl5960_1 (
-    .spi_csn(spi_adl5960_1_csn_s),
-    .spi_clk(spi_adl5960_1_clk_s),
-    .spi_mosi(spi_adl5960_1_mosi_s),
-    .spi_miso(spi_adl5960_1_miso_s),
-    .spi_sdio(spi_adl5960_1_sdio),
+  ) i_spi_adl5960 (
+    .spi_csn(spi_adl5960_csn_s),
+    .spi_clk(spi_adl5960_clk_s),
+    .spi_mosi(spi_adl5960_mosi_s),
+    .spi_miso(spi_adl5960_miso_s),
+    .spi_sdio(spi_adl5960_sdio),
     .spi_dir());
 
   IBUFDS i_ibufds_sysref (
@@ -365,12 +365,12 @@ module system_top (
     .ndac_spi_sdo_o (ndac_sdi),
     .ndac_spi_sdi_i (),
 
-    .spi_adl5960_1_csn_i (spi_adl5960_1_csn_s),
-    .spi_adl5960_1_csn_o (spi_adl5960_1_csn_s),
-    .spi_adl5960_1_clk_i (spi_adl5960_1_clk_s),
-    .spi_adl5960_1_clk_o (spi_adl5960_1_clk_s),
-    .spi_adl5960_1_sdo_i (spi_adl5960_1_mosi_s),
-    .spi_adl5960_1_sdo_o (spi_adl5960_1_mosi_s),
-    .spi_adl5960_1_sdi_i (spi_adl5960_1_miso_s));
+    .spi_adl5960_csn_i (spi_adl5960_csn_s),
+    .spi_adl5960_csn_o (spi_adl5960_csn_s),
+    .spi_adl5960_clk_i (spi_adl5960_clk_s),
+    .spi_adl5960_clk_o (spi_adl5960_clk_s),
+    .spi_adl5960_sdo_i (spi_adl5960_mosi_s),
+    .spi_adl5960_sdo_o (spi_adl5960_mosi_s),
+    .spi_adl5960_sdi_i (spi_adl5960_miso_s));
 
 endmodule
