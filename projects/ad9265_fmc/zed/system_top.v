@@ -81,7 +81,7 @@ module system_top (
   inout   [ 1:0]  iic_mux_scl,
   inout   [ 1:0]  iic_mux_sda,
 
-  input           otg_vbusoc
+  input           otg_vbusoc,
 
   input           adc_clk_in_n,
   input           adc_clk_in_p,

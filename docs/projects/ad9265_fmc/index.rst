@@ -37,7 +37,7 @@ Supported carriers
    * - Evaluation board
      - Carrier
      - FMC slot
-   * - :adi:`EVAL-AD9434-FMC-500EBZ <EVAL-AD9434>`
+   * - :adi:`EVAL-AD9265-FMC-500EBZ <EVAL-AD9265>`
      - :xilinx:`ZC706`
      - FMC LPC
    * -
@@ -153,119 +153,33 @@ typing in your command prompt(this example :adi:`ZC706``):
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 
-Software considerations
--------------------------------------------------------------------------------
-
-\**\* MENTION THESE \**\*
-
-ADC - crossbar config \**\* THIS IS JUST AN EXAMPLE \**\*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Due to physical constraints, Rx lanes are reordered as described in the
-following table.
-
-e.g physical lane 2 from ADC connects to logical lane 7
-from the FPGA. Therefore the crossbar from the device must be set
-accordingly.
-
-============ ===========================
-ADC phy Lane FPGA Rx lane / Logical Lane
-============ ===========================
-0            2
-1            0
-2            7
-3            6
-4            5
-5            4
-6            3
-7            1
-============ ===========================
-
-DAC - crossbar config \**\* THIS IS JUST AN EXAMPLE \**\*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Due to physical constraints, Tx lanes are reordered as described in the
-following table:
-
-e.g physical lane 2 from DAC connects to logical lane 7
-from the FPGA. Therefore the crossbar from the device must be set
-accordingly.
-
-============ ===========================
-DAC phy Lane FPGA Tx lane / Logical Lane
-============ ===========================
-0            0
-1            2
-2            7
-3            6
-4            1
-5            5
-6            4
-7            3
-============ ===========================
-
 Resources
 -------------------------------------------------------------------------------
 
 Systems related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Links to the Quick start guides, to the pages where the hardware changes are
-   specified in detail, etc. in the form of a table as the one below
-
-**THIS IS JUST AN EXAMPLE**
-
--  :dokuwiki:`[Wiki] AD9081 & AD9082 & AD9988 & AD9986 Prototyping Platform User Guide <resources/eval/user-guides/ad9081_fmca_ebz>`
--  Here you can find all the quick start guides on wiki documentation:dokuwiki:`[Wiki] AD9081 Quick Start Guides <resources/eval/user-guides/ad9081_fmca_ebz/quickstart>`
-
 Here you can find the quick start guides available for these evaluation boards:
 
 .. list-table::
-   :widths: 20 10 20 20 20 10
+   :widths: 20 10
    :header-rows: 1
 
    * - Evaluation board
      - Zynq-7000
-     - Zynq UltraScale+ MP
-     - Microblaze
-     - Versal
-     - Arria 10
-   * - AD9081/AD9082-FMCA-EBZ
-     - :dokuwiki:`ZC706 <resources/eval/user-guides/ad9081_fmca_ebz/quickstart/zynq>`
-     - :dokuwiki:`ZCU102 <resources/eval/user-guides/ad9081_fmca_ebz/quickstart/zynqmp>`
-     - :dokuwiki:`VCU118 <resources/eval/user-guides/ad9081_fmca_ebz/quickstart/microblaze>`
-     - :dokuwiki:`VCK190/VMK180 <resources/eval/user-guides/ad9081_fmca_ebz/quickstart/versal>`
-     - :dokuwiki:`A10SoC <resources/eval/user-guides/ad9081/quickstart/a10soc>`
-
--  Other relevant information
+   * - AD9265-FMC
+     - :dokuwiki:`ZC706 <resources/fpga/xilinx/fmc/ad9265>`
 
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Product datasheets:
-
-   -  :adi:`AD9081`
-   -  :adi:`AD9082`
-   -  :adi:`AD9988`
-   -  :adi:`AD9986`
--  `UG-1578, Device User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/ad9081-ad9082-ug-1578.pdf>`__
--  `UG-1829, Evaluation Board User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/ad9081-fmca-ebz-9082-fmca-ebz-ug-1829.pdf>`__
+-  Product datasheets: :adi:`AD9265`
+-  :dokuwiki:`Evaluating AD9434, user guide <resources/eval/ad9265-fmc-125ebz>`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Link to the project source code
--  Table like the one below. Must have as first IP (if it exists) the IP that
-   was created with this project (i.e., axi_ad9783). If there isn't, then to
-   be taken in the order they are written in the Makefile of the project,
-   stating the source code link in a column and the documentation link in
-   another column
--  Other relevant information
-
-**THIS IS JUST AN EXAMPLE**
-
--  :git-hdl:`AD9081_FMCA_EBZ HDL project source code <projects/ad9081_fmca_ebz>`
--  :git-hdl:`AD9082_FMCA_EBZ HDL project source code <projects/ad9082_fmca_ebz>`
+-  :git-hdl:`AD9265-FMC HDL project source code <projects/ad9265_fmc>`
 
 .. list-table::
    :widths: 30 35 35
@@ -274,66 +188,40 @@ HDL related
    * - IP name
      - Source code link
      - Documentation link
+   * - AXI_AD9265
+     - :git-hdl:`library/axi_ad9434 <library/axi_ad9265>`
+     - ---
    * - AXI_DMAC
-     - :git-hdl:`library/axi_dmac`
+     - :git-hdl:`library/axi_dmac <library/axi_dmac>`
      - :ref:`here <axi_dmac>`
+   * - AXI_CLKGEN
+     - :git-hdl:`library/axi_clkgen <library/axi_clkgen>`
+     - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_clkgen>`
+   * - AXI_HDMI_TX
+     - :git-hdl:`library/axi_hdmi_tx <library/axi_ad9434>`
+     - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_hdmi_tx>`
+   * - AXI_SPDIF_TX
+     - :git-hdl:`library/axi_spdif_tx <library/axi_spdif_tx>`
+     - ---
+   * - AXI_I2S_ADI
+     - :git-hdl:`library/axi_sysid <library/axi_i2s_adi>`
+     - ---
    * - AXI_SYSID
-     - :git-hdl:`library/axi_sysid`
+     - :git-hdl:`library/axi_sysid <library/axi_sysid>`
      - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_sysid>`
    * - SYSID_ROM
-     - :git-hdl:`library/sysid_rom`
+     - :git-hdl:`library/sysid_rom <library/sysid_rom>`
      - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_sysid>`
-   * - UTIL_CPACK2
-     - :git-hdl:`library/util_pack/util_cpack2`
-     - :dokuwiki:`[Wiki] <resources/fpga/docs/util_cpack>`
-   * - UTIL_UPACK2
-     - :git-hdl:`library/util_pack/util_upack2`
-     - :dokuwiki:`[Wiki] <resources/fpga/docs/util_upack>`
-   * - UTIL_ADXCVR for AMD
-     - :git-hdl:`library/xilinx/util_adxcvr`
-     - :dokuwiki:`[Wiki] <resources/fpga/docs/util_xcvr>`
-   * - AXI_ADXCVR for Intel
-     - :git-hdl:`library/intel/axi_adxcvr`
-     - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_adxcvr>`
-   * - AXI_ADXCVR for AMD
-     - :git-hdl:`library/xilinx/axi_adxcvr`
-     - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_adxcvr>`
-   * - AXI_JESD204_RX
-     - :git-hdl:`library/jesd204/axi_jesd204_rx`
-     - :dokuwiki:`[Wiki] <resources/fpga/peripherals/jesd204/axi_jesd204_rx>`
-   * - AXI_JESD204_TX
-     - :git-hdl:`library/jesd204/axi_jesd204_tx`
-     - :dokuwiki:`[Wiki] <resources/fpga/peripherals/jesd204/axi_jesd204_tx>`
-   * - JESD204_TPL_ADC
-     - :git-hdl:`library/jesd204/ad_ip_jesd204_tpl_adc`
-     - :dokuwiki:`[Wiki] <resources/fpga/peripherals/jesd204/jesd204_tpl_adc>`
-   * - JESD204_TPL_DAC
-     - :git-hdl:`library/jesd204/ad_ip_jesd204_tpl_dac`
-     - :dokuwiki:`[Wiki] <resources/fpga/peripherals/jesd204/jesd204_tpl_dac>`
-
-\**\* MENTION THESE for JESD reference designs \**\*
-
--  :dokuwiki:`[Wiki] Generic JESD204B block designs <resources/fpga/docs/hdl/generic_jesd_bds>`
--  :dokuwiki:`[Wiki] JESD204B High-Speed Serial Interface Support <resources/fpga/peripherals/jesd204>`
-
-\**\* MENTION THIS for SPI Engine reference designs \**\*
-
--  :ref:`SPI Engine Framework documentation <spi_engine>`
+   * - UTIL_I2C_MIXER
+     - :git-hdl:`library/axi_sysid <library/util_i2c_mixer>`
+     - ---
 
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-**THIS IS JUST AN EXAMPLE**
-
--  :dokuwiki:`[Wiki] AD9081-FMCA-EBZ Linux driver wiki page <resources/tools-software/linux-drivers/iio-mxfe/ad9081>`
-
-If there is no Linux driver page, then insert a link to the code of the driver
-and of the device tree.
-
--  Python support (THIS IS JUST AN EXAMPLE):
-
-   -  `AD9081 class documentation <https://analogdevicesinc.github.io/pyadi-iio/devices/adi.ad9081.html>`__
-   -  `PyADI-IIO documentation <https://analogdevicesinc.github.io/pyadi-iio/>`__
+- :git-linux:`Linux device tree zynq-zc706-adv7511-ad9265-fmc-125ebz.dts <arch/arm/boot/dts/zynq-zc706-adv7511-ad9265-fmc-125ebz.dts>`
+- :git-linux:`Linux driver ad9467.c <drivers/iio/adc/ad9467.c>`
+  (used for AD9265-FMC as well)
 
 .. include:: ../common/more_information.rst
 
