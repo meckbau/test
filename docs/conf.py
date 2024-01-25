@@ -1,33 +1,28 @@
-# Configuration file for the Sphinx documentation builder.
-#
-# https://www.sphinx-doc.org/en/master/usage/configuration.html
-
-# -- Project information -----------------------------------------------------
+# -- Project information ------------------------------------------------------
 
 project = 'HDL, Analog Devices'
 copyright = '2023, Analog Devices Inc'
 author = 'Analog Devices Inc'
 release = 'v0.1'
 
-# -- General configuration ---------------------------------------------------
-
-import os, sys
-
-sys.path.append(os.path.abspath("./extensions"))
+# -- General configuration ----------------------------------------------------
 
 extensions = [
-	"sphinx.ext.todo",
-	"sphinx.ext.viewcode",
-	"sphinxcontrib.wavedrom",
-	"adi_links",
-	"adi_hdl_parser"
+    "sphinx.ext.todo",
+    "sphinx.ext.intersphinx",
+    "sphinx.ext.viewcode",
+    "sphinxcontrib.wavedrom",
+    "adi_doctools"
 ]
 
-templates_path = ['sources/template']
-
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+source_suffix = '.rst'
 
-# -- Custom extensions configuration -------------------------------------------
+# -- External docs configuration ----------------------------------------------
+
+intersphinx_mapping = { 'doctools' : ('https://analogdevicesinc.github.io/doctools', None)}
+
+# -- Custom extensions configuration ------------------------------------------
 
 hide_collapsible_content = True
 validate_links = False
@@ -41,6 +36,5 @@ todo_emit_warnings = True
 
 html_theme = 'furo'
 html_static_path = ['sources']
-source_suffix = '.rst'
 html_css_files = ["custom.css"]
 html_favicon = "sources/icon.svg"

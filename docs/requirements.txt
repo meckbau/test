@@ -1,9 +1,4 @@
 sphinx
-regex
-lxml
+https://github.com/analogdevicesinc/doctools/releases/download/latest/adi-doctools.tar.gz
 furo
-wavedrom
-aiohttp
-aiodns
-sphinxcontrib-wavedrom
-sphinxcontrib-svg2pdfconverter
+sphinxcontrib.wavedrom

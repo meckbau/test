@@ -33,9 +33,6 @@ HDL Reference Designs
    ADAQ7980-SDZ <projects/adaq7980_sdz/index>
    CN0561 <projects/cn0561/index>
 
-.. role:: red
-.. role:: green
-
 .. attention::
 
    Work-in-progress, not all content available at the
@@ -51,3 +48,5 @@ HDL libraries and projects for various reference design and prototyping systems.
 This repository contains HDL code (Verilog or VHDL) and the required Tcl scripts
 to create and build a specific FPGA example design using Xilinx and/or Intel tool
 chain.
+
+.. hdl-build-status::
