@@ -15,6 +15,7 @@ HDL Reference Designs
 
    library/axi_dmac/index
    library/spi_engine/index
+   library/i3c_controller/index
 
 .. toctree::
    :caption: Projects
